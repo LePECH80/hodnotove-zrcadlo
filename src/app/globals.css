@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary:    #58113c;
+  --color-secondary:  #8d175e;
+  --color-pink-light: #e4bdd1;
+  --color-orange:     #f1905c;
+  --color-peach:      #f8f5f3;
+  --color-cream:      #fbdcd1;
+}
+
+body {
+  background-color: var(--color-peach);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(141, 23, 94, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 0% 100%, rgba(241, 144, 92, 0.06) 0%, transparent 55%);
+  background-attachment: fixed;
+  color: var(--color-primary);
+}
+
+/* Gradient utilities */
+.gradient-brand {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-orange));
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+/* Progress bar gradient */
+.progress-bar {
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-orange));
+  border-radius: 9999px;
+  transition: width 0.6s ease;
+}
+
+/* Chat bubbles */
+.bubble-ai {
+  background-color: white;
+  border-radius: 4px 16px 16px 16px;
+  box-shadow: 0 1px 4px rgba(88, 17, 60, 0.08);
+}
+
+.bubble-user {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  border-radius: 16px 4px 16px 16px;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(88, 17, 60, 0.07);
+}
+
+.card-pink {
+  background-color: var(--color-pink-light);
+  border-radius: 14px;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  border-radius: 10px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 1.5px solid var(--color-secondary);
+  border-radius: 10px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-pink-light);
+}
+
+/* Report specifics */
+.report-hero {
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 14px;
+}
+
+.report-quote {
+  border-left: 4px solid var(--color-orange);
+  background-color: var(--color-peach);
+  border-radius: 0 10px 10px 0;
+  padding: 1rem 1.5rem;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: white;
+    font-size: 11pt;
+  }
+
+  /* Prevent cards splitting across pages */
+  .card,
+  .card-pink,
+  section,
+  .report-hero,
+  .report-quote,
+  table,
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Section headings stay with their content */
+  h2, h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Force new page before major sections */
+  .print-break-before {
+    page-break-before: always;
+    break-before: always;
+  }
+
+  /* Color fidelity */
+  .report-hero,
+  .progress-bar,
+  .gradient-primary,
+  .gradient-brand,
+  .btn-primary {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove sticky header */
+  .sticky {
+    position: static !important;
+  }
+
+  /* Tighter spacing in print */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Constellation loading animation */
+@keyframes constellation-dot-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes constellation-line-in {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes constellation-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-pink-light);
+  border-radius: 9999px;
+}
