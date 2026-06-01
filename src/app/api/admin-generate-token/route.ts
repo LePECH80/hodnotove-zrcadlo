@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
     // Odešli email přes Resend
     const { error: emailError } = await resend.emails.send({
-      from: 'Lenka z inspiraise <diagnostika@inspiraise.com>',
+      from: 'Lenka z Inspiraise <diagnostika@inspiraise.com>',
       to: clientEmail.trim(),
       subject: 'Tvůj přístup k Osobní mapě hodnoty ✨',
       html: `
@@ -74,9 +74,7 @@ export async function POST(req: NextRequest) {
           <!-- Header -->
           <tr>
             <td style="background-color:#58113c;border-radius:14px 14px 0 0;padding:32px 40px;text-align:center;">
-              <img src="${logoUrl}" alt="inspiraise" height="32"
-                   style="display:block;margin:0 auto 12px;height:32px;"
-                   onerror="this.style.display='none'" />
+              <p style="margin:0 0 10px;color:#e4bdd1;font-size:13px;letter-spacing:4px;text-transform:uppercase;font-family:sans-serif;font-weight:600;">Inspiraise</p>
               <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:normal;line-height:1.4;">Osobní mapa hodnoty</h1>
             </td>
           </tr>
@@ -127,7 +125,7 @@ export async function POST(req: NextRequest) {
 
               <p style="margin:0;color:#58113c;font-size:16px;line-height:1.7;">
                 Těším se na výsledky,<br/>
-                <strong>Lenka z inspiraise</strong>
+                <strong>Lenka z Inspiraise</strong>
               </p>
             </td>
           </tr>
@@ -136,7 +134,7 @@ export async function POST(req: NextRequest) {
           <tr>
             <td style="padding:24px 0 0;text-align:center;">
               <p style="margin:0;color:#58113c60;font-size:12px;font-family:sans-serif;">
-                inspiraise ·
+                Inspiraise ·
                 <a href="https://inspiraise.com" style="color:#8d175e;text-decoration:none;">inspiraise.com</a>
               </p>
             </td>
