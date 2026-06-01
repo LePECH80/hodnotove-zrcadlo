@@ -205,7 +205,7 @@ function StartContent() {
 
         {/* Wispr Flow tip */}
         <div className="card-pink p-7 md:p-8">
-          <p className="font-bold text-primary mb-3">Než začneš, mám pro tebe jeden tip…</p>
+          <p className="font-bold text-primary mb-3">💡 Mám pro tebe jeden tip.</p>
           <div className="space-y-3 text-sm text-primary/80 leading-relaxed">
             <p>
               Z vlastních zkušeností jsem si všimla, že mnohem zajímavější odpovědi vznikají
