@@ -11,6 +11,37 @@ export async function POST(req: NextRequest) {
 
     const supabase = createClient()
 
+    // Dev/testovací bypass — token se neoznačí jako použitý, lze použít opakovaně
+    const devToken = process.env.DEV_TOKEN
+    if (devToken && token === devToken) {
+      // Najdi nebo vytvoř dev token v databázi (kvůli FK na sessions)
+      let { data: devRow } = await supabase
+        .from('tokens')
+        .select('id')
+        .eq('token', devToken)
+        .single()
+
+      if (!devRow) {
+        const { data: newRow } = await supabase
+          .from('tokens')
+          .insert({ token: devToken, email: 'test@test.cz', used: false })
+          .select('id')
+          .single()
+        devRow = newRow
+      }
+
+      if (devRow) {
+        const { data: session } = await supabase
+          .from('sessions')
+          .insert({ token_id: devRow.id, messages: [], current_phase: 1 })
+          .select('id')
+          .single()
+        if (session) {
+          return NextResponse.json({ valid: true, sessionId: session.id, email: 'test@test.cz' })
+        }
+      }
+    }
+
     // Find token
     const { data: tokenRow, error } = await supabase
       .from('tokens')
