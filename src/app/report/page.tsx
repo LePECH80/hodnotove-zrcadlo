@@ -51,7 +51,17 @@ interface SavedThought {
   role: 'user' | 'assistant'
 }
 
-// --- Animace konstelace ---
+// --- Animované tečky v textu ---
+function AnimatedDots() {
+  const [count, setCount] = useState(1)
+  useEffect(() => {
+    const id = setInterval(() => setCount(c => (c % 3) + 1), 600)
+    return () => clearInterval(id)
+  }, [])
+  return <span>{'.'.repeat(count)}</span>
+}
+
+// --- Animace konstelace (plynulá smyčka) ---
 function ConstellationLoader() {
   const dots = [
     { x: 30,  y: 92  },
@@ -70,44 +80,42 @@ function ConstellationLoader() {
   ]
 
   return (
-    <div style={{ animation: 'constellation-pulse 3s ease-in-out 2.2s infinite' }}>
-      <svg width="260" height="165" viewBox="0 0 260 165" aria-hidden="true">
-        {lines.map(([a, b], i) => {
-          const dx = dots[b].x - dots[a].x
-          const dy = dots[b].y - dots[a].y
-          const len = Math.round(Math.sqrt(dx * dx + dy * dy))
-          return (
-            <line
-              key={`l${i}`}
-              x1={dots[a].x} y1={dots[a].y}
-              x2={dots[b].x} y2={dots[b].y}
-              stroke="var(--color-secondary)"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeDasharray={len}
-              strokeDashoffset={len}
-              style={{
-                opacity: 0.3,
-                animation: `constellation-line-in 0.55s ease forwards ${0.45 + i * 0.13}s`,
-              }}
-            />
-          )
-        })}
-        {dots.map((d, i) => (
-          <circle
-            key={`d${i}`}
-            cx={d.x}
-            cy={d.y}
-            r={i === 0 ? 5.5 : 3.5}
-            fill={i === 0 ? 'var(--color-orange)' : 'var(--color-secondary)'}
+    <svg width="480" height="304" viewBox="0 0 260 165" aria-hidden="true">
+      {lines.map(([a, b], i) => {
+        const dx = dots[b].x - dots[a].x
+        const dy = dots[b].y - dots[a].y
+        const len = Math.round(Math.sqrt(dx * dx + dy * dy))
+        return (
+          <line
+            key={`l${i}`}
+            x1={dots[a].x} y1={dots[a].y}
+            x2={dots[b].x} y2={dots[b].y}
+            stroke="var(--color-secondary)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray={len}
+            strokeDashoffset={len}
             style={{
-              opacity: 0,
-              animation: `constellation-dot-in 0.3s ease forwards ${i * 0.08}s`,
+              opacity: 0.35,
+              animation: `constellation-line-in 1.2s ease-in-out ${0.2 + i * 0.15}s infinite alternate`,
             }}
           />
-        ))}
-      </svg>
-    </div>
+        )
+      })}
+      {dots.map((d, i) => (
+        <circle
+          key={`d${i}`}
+          cx={d.x}
+          cy={d.y}
+          r={i === 0 ? 6 : 4}
+          fill={i === 0 ? 'var(--color-orange)' : 'var(--color-secondary)'}
+          style={{
+            opacity: 0,
+            animation: `constellation-dot-in 0.5s ease-in-out ${i * 0.1}s infinite alternate`,
+          }}
+        />
+      ))}
+    </svg>
   )
 }
 
@@ -171,15 +179,18 @@ export default function ReportPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen gap-7 px-6">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-8 px-6">
         <ConstellationLoader />
         <div className="text-center max-w-sm">
-          <p className="text-primary font-semibold mb-2 text-base leading-snug">
+          <p className="text-primary font-semibold mb-2 text-lg leading-snug">
             To nejzajímavější bývá často schované mezi řádky.
           </p>
           <p className="text-primary/55 text-sm leading-relaxed">
             Právě propojuji stopy, které se během našeho rozhovoru objevily,
-            a skládám z nich tvou Osobní mapu. Chvilku strpení…
+            a skládám z nich tvou Osobní mapu<AnimatedDots />
+          </p>
+          <p className="text-primary/35 text-xs mt-3">
+            Může to trvat až minutu — výsledek stojí za to.
           </p>
         </div>
       </div>
