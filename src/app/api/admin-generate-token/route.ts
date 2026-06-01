@@ -7,20 +7,23 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 // České vokativy — převede jméno do 5. pádu
 function toVocative(fullName: string): string {
   const first = fullName.trim().split(' ')[0]
+  // Normalizuj — první písmeno velké, zbytek malý
+  const name = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
+
   // Ženská jména na -a → -o (Lenka→Lenko, Jana→Jano, Eva→Evo, Markéta→Markéto)
-  if (first.endsWith('a') || first.endsWith('á')) {
-    return first.slice(0, -1) + 'o'
+  if (name.endsWith('a') || name.endsWith('á')) {
+    return name.slice(0, -1) + 'o'
   }
-  // Mužská jména na -el, -il → -eli, -ili (Daniel→Danieli, Emil→Emili)
-  if (first.endsWith('el') || first.endsWith('il')) return first + 'i'
-  // Mužská jména na -r → -re (Petr→Petře - zjednodušeno)
-  if (first.endsWith('r')) return first + 'e'
+  // Mužská jména na -el, -il → -i (Daniel→Danieli, Emil→Emili)
+  if (name.endsWith('el') || name.endsWith('il')) return name + 'i'
+  // Mužská jména na -r → -re (Petr→Petre)
+  if (name.endsWith('r')) return name + 'e'
   // Mužská jména na -n → -ne (Jan→Jane, Martin→Martine)
-  if (first.endsWith('n')) return first + 'e'
-  // Mužská jména na -k → -ku (Marek→Marku, Tomek→Tomku)
-  if (first.endsWith('k')) return first.slice(0, -1) + 'ku'
-  // Ostatní — vrátíme jak je
-  return first
+  if (name.endsWith('n')) return name + 'e'
+  // Mužská jména na -k → -ku (Marek→Marku)
+  if (name.endsWith('k')) return name.slice(0, -1) + 'ku'
+  // Ostatní — vrátíme normalizované
+  return name
 }
 
 export async function POST(req: NextRequest) {
@@ -134,7 +137,7 @@ export async function POST(req: NextRequest) {
           <tr>
             <td style="padding:24px 0 0;text-align:center;">
               <p style="margin:0;color:#58113c60;font-size:12px;font-family:sans-serif;">
-                Inspiraise ·
+                Inspiraise s.r.o. ·
                 <a href="https://inspiraise.com" style="color:#8d175e;text-decoration:none;">inspiraise.com</a>
               </p>
             </td>
