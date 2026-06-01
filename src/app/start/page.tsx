@@ -9,7 +9,7 @@ const PHASES = [
   {
     num: 1,
     name: 'Stopy',
-    desc: 'Vytáhneme konkrétní situace, ve kterých jsi přirozeně pomohla, věci zjednodušila nebo věděla, co ostatní ne.',
+    desc: 'Vytáhneme konkrétní situace, ve kterých přirozeně pomáháš, věci zjednodušuješ nebo víš, co ostatní ne.',
   },
   {
     num: 2,
@@ -29,7 +29,7 @@ const PHASES = [
   {
     num: 5,
     name: 'Další směr',
-    desc: 'Přeložíme, co jsme spolu odhalily, do prvního konkrétního směru — ať už jde o nabídku, práci nebo osobní rozvoj.',
+    desc: 'Přeložíme, co jsme spolu objevili, do prvního konkrétního směru — ať už jde o nabídku, práci nebo osobní rozvoj.',
   },
 ]
 
@@ -140,7 +140,7 @@ function StartContent() {
           <div className="space-y-3 text-primary/80 leading-relaxed text-sm md:text-base">
             <p>
               Před tebou je <strong className="text-primary">45–60 minut objevování</strong> toho,
-              co už možná dávno umíš, ale přestala jsi to vnímat jako něco výjimečného.
+              co už možná dávno umíš, ale přestalo ti to připadat jako něco výjimečného.
             </p>
             <p>
               Společně projdeme pět oblastí, které nám pomohou odhalit opakující se vzorce,
