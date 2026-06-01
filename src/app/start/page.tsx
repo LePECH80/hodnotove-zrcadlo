@@ -223,21 +223,20 @@ function StartContent() {
             <p>
               Já osobně používám aplikaci{' '}
               <strong className="text-primary">Wispr Flow</strong>, která převádí hlas do textu
-              a jako jedna z mála nepíše hlouposti.
+              a jako jedna z mála mi opravdu rozumí a nepíše hlouposti. :-)
             </p>
-            <div className="pt-1">
+            <p>
+              👉 Jestli chceš vyzkoušet Wispr Flow v plné verzi na 30 dní zdarma, použij{' '}
               <a
                 href="https://wisprflow.ai/r?LENKA74"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 font-semibold text-secondary hover:text-primary transition-colors"
+                className="font-semibold text-secondary hover:text-primary underline transition-colors"
               >
-                👉 Vyzkoušet Wispr Flow zdarma
+                můj odkaz
               </a>
-              <p className="text-xs text-primary/50 mt-1">
-                Získáš 1 měsíc plné verze zdarma přes můj odkaz.
-              </p>
-            </div>
+              .
+            </p>
           </div>
         </div>
 
