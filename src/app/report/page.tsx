@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface Strength {
   title: string
@@ -119,8 +119,9 @@ function ConstellationLoader() {
   )
 }
 
-export default function ReportPage() {
+function ReportPageContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [report, setReport] = useState<ReportData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -135,7 +136,9 @@ export default function ReportPage() {
       try { setAhaThoughts(JSON.parse(saved)) } catch { /* ignore */ }
     }
 
-    const sessionId = sessionStorage.getItem('sessionId')
+    // sessionId z URL parametru (z emailu) nebo ze sessionStorage
+    const urlSessionId = searchParams.get('session')
+    const sessionId = urlSessionId || sessionStorage.getItem('sessionId')
     if (!sessionId) {
       setError(true)
       setLoading(false)
@@ -605,9 +608,17 @@ export default function ReportPage() {
         </section>
 
         <footer className="text-center text-xs text-primary/40 pb-6 no-print">
-          © {new Date().getFullYear()} inspiraise · Hodnotové zrcadlo · Mapa hodnoty
+          © {new Date().getFullYear()} Inspiraise s.r.o. · Osobní mapa hodnoty
         </footer>
       </div>
     </div>
+  )
+}
+
+export default function ReportPage() {
+  return (
+    <Suspense>
+      <ReportPageContent />
+    </Suspense>
   )
 }

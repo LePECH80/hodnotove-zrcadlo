@@ -173,6 +173,7 @@ export async function POST(req: NextRequest) {
       const vocName = clientName ? toVocative(clientName) : ''
       const greeting = vocName ? `Ahoj ${vocName},` : 'Ahoj,'
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mapa.inspiraise.com'
+      const reportUrl = `${appUrl}/report?session=${sessionId}`
 
       const strengths = (reportData.coreStrengths || []).slice(0, 3)
       const valueZone = (reportData.valueZone || []).slice(0, 2)
@@ -241,8 +242,19 @@ export async function POST(req: NextRequest) {
           <p style="margin:0;color:#ffffff;font-size:15px;line-height:1.7;font-style:italic;">${reportData.closingMirror || ''}</p>
         </div>
 
-        <p style="margin:0 0 4px;color:#58113c80;font-size:13px;line-height:1.6;font-family:sans-serif;">
-          💡 Plný report si můžeš uložit jako PDF přímo z prohlížeče — stránka s reportem má tlačítko "Stáhnout jako PDF".
+        <!-- Tlačítko pro plný report -->
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td align="center" style="padding:8px 0 24px;">
+              <a href="${reportUrl}"
+                 style="background-color:#8d175e;color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:10px;font-size:15px;font-weight:600;font-family:sans-serif;display:inline-block;">
+                Zobrazit celý report →
+              </a>
+            </td>
+          </tr>
+        </table>
+        <p style="margin:0 0 24px;color:#58113c80;font-size:13px;line-height:1.6;font-family:sans-serif;text-align:center;">
+          💡 Na stránce reportu najdeš také tlačítko "Stáhnout jako PDF".
         </p>
 
         <p style="margin:28px 0 0;color:#58113c;font-size:16px;line-height:1.7;">
