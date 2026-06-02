@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@/lib/supabase'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+function toVocative(fullName: string): string {
+  const first = fullName.trim().split(' ')[0]
+  const name = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
+  if (name.endsWith('a') || name.endsWith('á')) return name.slice(0, -1) + 'o'
+  if (name.endsWith('el') || name.endsWith('il')) return name + 'i'
+  if (name.endsWith('r')) return name + 'e'
+  if (name.endsWith('n')) return name + 'e'
+  if (name.endsWith('k')) return name.slice(0, -1) + 'ku'
+  return name
+}
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
@@ -146,6 +160,111 @@ export async function POST(req: NextRequest) {
       .from('sessions')
       .update({ report: JSON.stringify(reportData) })
       .eq('id', sessionId)
+
+    // Získej email a jméno klientky pro odeslání reportu
+    const { data: sessionData } = await supabase
+      .from('sessions')
+      .select('client_name, client_email')
+      .eq('id', sessionId)
+      .single()
+
+    if (sessionData?.client_email) {
+      const clientName = sessionData.client_name || ''
+      const vocName = clientName ? toVocative(clientName) : ''
+      const greeting = vocName ? `Ahoj ${vocName},` : 'Ahoj,'
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mapa.inspiraise.com'
+
+      const strengths = (reportData.coreStrengths || []).slice(0, 3)
+      const valueZone = (reportData.valueZone || []).slice(0, 2)
+      const nextSteps = (reportData.nextSteps || []).slice(0, 3)
+
+      await resend.emails.send({
+        from: 'Lenka z Inspiraise <diagnostika@inspiraise.com>',
+        to: sessionData.client_email,
+        subject: 'Tvoje Osobní mapa hodnoty je tady ✨',
+        html: `
+<!DOCTYPE html>
+<html lang="cs">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f8f5f3;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f5f3;padding:40px 20px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+      <!-- Header -->
+      <tr><td style="background-color:#58113c;border-radius:14px 14px 0 0;padding:32px 40px;text-align:center;">
+        <p style="margin:0 0 10px;color:#e4bdd1;font-size:13px;letter-spacing:4px;text-transform:uppercase;font-family:sans-serif;font-weight:600;">Inspiraise</p>
+        <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:normal;line-height:1.4;">Osobní mapa hodnoty</h1>
+      </td></tr>
+
+      <!-- Body -->
+      <tr><td style="background-color:#ffffff;padding:40px;border-radius:0 0 14px 14px;">
+        <p style="margin:0 0 20px;color:#58113c;font-size:16px;line-height:1.7;">${greeting}</p>
+        <p style="margin:0 0 28px;color:#58113c;font-size:16px;line-height:1.7;">
+          tvoje <strong>Osobní mapa hodnoty</strong> je hotová. Níže najdeš klíčové výsledky — ulož si je, vrať se k nim, až budeš přemýšlet o dalším směru.
+        </p>
+
+        <!-- Hero Insight -->
+        ${reportData.heroInsight ? `
+        <div style="background-color:#f8f5f3;border-left:4px solid #f1905c;border-radius:0 10px 10px 0;padding:16px 20px;margin:0 0 28px;">
+          <p style="margin:0;color:#58113c;font-size:15px;line-height:1.7;font-style:italic;">"${reportData.heroInsight}"</p>
+        </div>` : ''}
+
+        <!-- Silná jádra -->
+        ${strengths.length > 0 ? `
+        <h2 style="margin:0 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Tvoje silná jádra</h2>
+        ${strengths.map((s: {title: string; description: string; whyItMatters: string}) => `
+        <div style="margin:0 0 16px;padding:16px 20px;background-color:#f8f5f3;border-radius:10px;">
+          <p style="margin:0 0 6px;color:#8d175e;font-size:14px;font-weight:700;font-family:sans-serif;">${s.title}</p>
+          <p style="margin:0 0 6px;color:#58113c;font-size:14px;line-height:1.6;">${s.description}</p>
+          <p style="margin:0;color:#58113c80;font-size:13px;font-style:italic;">${s.whyItMatters}</p>
+        </div>`).join('')}` : ''}
+
+        <!-- Zóna hodnoty -->
+        ${valueZone.length > 0 ? `
+        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Tvoje zóna hodnoty</h2>
+        ${valueZone.map((v: {archetype: string; description: string}) => `
+        <div style="margin:0 0 12px;padding:14px 20px;border:1.5px solid #e4bdd1;border-radius:10px;">
+          <p style="margin:0 0 4px;color:#8d175e;font-size:14px;font-weight:700;font-family:sans-serif;">${v.archetype}</p>
+          <p style="margin:0;color:#58113c;font-size:14px;line-height:1.6;">${v.description}</p>
+        </div>`).join('')}` : ''}
+
+        <!-- Další kroky -->
+        ${nextSteps.length > 0 ? `
+        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Další kroky</h2>
+        <ol style="margin:0 0 28px;padding-left:20px;color:#58113c;font-size:15px;line-height:1.8;">
+          ${nextSteps.map((s: string) => `<li style="margin-bottom:8px;">${s}</li>`).join('')}
+        </ol>` : ''}
+
+        <!-- Závěr -->
+        <div style="background-color:#58113c;border-radius:10px;padding:20px 24px;margin:0 0 28px;">
+          <p style="margin:0;color:#ffffff;font-size:15px;line-height:1.7;font-style:italic;">${reportData.closingMirror || ''}</p>
+        </div>
+
+        <p style="margin:0 0 4px;color:#58113c80;font-size:13px;line-height:1.6;font-family:sans-serif;">
+          💡 Plný report si můžeš uložit jako PDF přímo z prohlížeče — stránka s reportem má tlačítko "Stáhnout jako PDF".
+        </p>
+
+        <p style="margin:28px 0 0;color:#58113c;font-size:16px;line-height:1.7;">
+          Užij si to, co jsi objevila,<br/>
+          <strong>Lenka z Inspiraise</strong>
+        </p>
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="padding:24px 0 0;text-align:center;">
+        <p style="margin:0;color:#58113c60;font-size:12px;font-family:sans-serif;">
+          Inspiraise s.r.o. · <a href="https://inspiraise.com" style="color:#8d175e;text-decoration:none;">inspiraise.com</a>
+        </p>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`,
+      }).catch(err => console.error('Report email error:', err))
+    }
 
     return NextResponse.json({ report: reportData })
   } catch (err) {
