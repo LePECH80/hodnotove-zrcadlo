@@ -97,6 +97,42 @@ Odpověz POUZE validním JSON objektem (bez markdown bloků, bez dalšího textu
     }
   ],
   "nextSteps": ["Konkrétní další krok 1", "Konkrétní další krok 2", "Konkrétní další krok 3"],
+  "moreLess": {
+    "more": [
+      "Situace, role nebo typ práce, kde se silné stránky opakovaně projevovaly — co dělat více 1",
+      "Co dělat více 2",
+      "Co dělat více 3"
+    ],
+    "less": [
+      "Činnost nebo situace, která opakovaně vysávala nebo brzdila — co dělat méně 1",
+      "Co dělat méně 2",
+      "Co dělat méně 3"
+    ]
+  },
+  "biggestValueZones": [
+    {
+      "zone": "Název oblasti — max. 3 oblasti celkem",
+      "evidence": "Konkrétní důkaz z rozhovoru, na kterém tato oblast stojí."
+    }
+  ],
+  "unknowns": [
+    "Co zatím nemáme dost podložené 1 — formulace: Na základě současných dat zatím nemůžeme zodpovědně tvrdit...",
+    "Co zatím nevíme 2"
+  ],
+  "experiments": [
+    "Malý experiment 1 — konkrétní, ověřitelný v praxi, ne rada ani doporučení",
+    "Experiment 2",
+    "Experiment 3"
+  ],
+  "strengthVsRisk": [
+    {
+      "strength": "Název hlavního vzorce nebo silné stránky",
+      "helpsWhen": "V jakých situacích tato síla vytváří hodnotu.",
+      "risksWhen": "Kdy může být přehnaná nebo kontraproduktivní.",
+      "peakValue": "Konkrétní podmínky nebo kontext, kde vytváří největší hodnotu.",
+      "watchOut": "Situace, kde tato síla může spíše ubírat než přidávat."
+    }
+  ],
   "closingMirror": "Závěrečné zrcadlo — 3–5 silných vět, které uzavírají celou diagnostiku a dávají pocit: Jo. Tohle dává smysl."
 }`
 

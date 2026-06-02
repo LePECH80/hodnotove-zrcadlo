@@ -28,6 +28,19 @@ interface Tension {
   question: string
 }
 
+interface BiggestValueZone {
+  zone: string
+  evidence: string
+}
+
+interface StrengthVsRisk {
+  strength: string
+  helpsWhen: string
+  risksWhen: string
+  peakValue: string
+  watchOut: string
+}
+
 interface ReportData {
   heroInsight: string
   clientSummary: string
@@ -42,6 +55,11 @@ interface ReportData {
   positioningPhrases: string[]
   tensions: Tension[]
   nextSteps: string[]
+  moreLess?: { more: string[]; less: string[] }
+  biggestValueZones?: BiggestValueZone[]
+  unknowns?: string[]
+  experiments?: string[]
+  strengthVsRisk?: StrengthVsRisk[]
   closingMirror: string
 }
 
@@ -502,7 +520,129 @@ function ReportPageContent() {
           </section>
         )}
 
-        {/* 13. ZÁVĚREČNÉ ZRCADLO */}
+        {/* 13. CO DĚLAT VÍCE / MÉNĚ */}
+        {(report.moreLess?.more?.length ?? 0) > 0 || (report.moreLess?.less?.length ?? 0) > 0 ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-4">Co dělat více a méně</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="card p-6">
+                <h3 className="font-semibold text-primary mb-3 flex items-center gap-2">
+                  <span className="text-lg text-secondary">↑</span> Dělat více
+                </h3>
+                <ul className="space-y-2">
+                  {report.moreLess!.more.map((item, i) => (
+                    <li key={i} className="text-sm text-primary/80 flex items-start gap-2">
+                      <span className="text-orange flex-shrink-0 mt-0.5">◆</span>{item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="card-pink p-6">
+                <h3 className="font-semibold text-primary mb-3 flex items-center gap-2">
+                  <span className="text-lg text-primary/40">↓</span> Dělat méně
+                </h3>
+                <ul className="space-y-2">
+                  {report.moreLess!.less.map((item, i) => (
+                    <li key={i} className="text-sm text-primary/80 flex items-start gap-2">
+                      <span className="text-primary/30 flex-shrink-0 mt-0.5">·</span>{item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {/* 14. KDE VZNIKÁ NEJVĚTŠÍ HODNOTA */}
+        {report.biggestValueZones?.length ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-4">Kde vzniká tvoje největší hodnota</h2>
+            <div className="space-y-4">
+              {report.biggestValueZones.map((z, i) => (
+                <div key={i} className="card p-6">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      {i + 1}
+                    </span>
+                    <h3 className="font-bold text-primary">{z.zone}</h3>
+                  </div>
+                  {z.evidence && (
+                    <p className="text-xs text-primary/50 italic ml-10">{z.evidence}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 15. SÍLA × RIZIKO */}
+        {report.strengthVsRisk?.length ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-4">Síla × Riziko</h2>
+            <p className="text-sm text-primary/60 mb-4">Každá silná stránka má svůj stín. Tato sekce ti ukazuje celou realitu.</p>
+            <div className="space-y-5">
+              {report.strengthVsRisk.map((s, i) => (
+                <div key={i} className="card p-6">
+                  <h3 className="font-bold text-primary mb-4">{s.strength}</h3>
+                  <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                    <div className="bg-peach rounded-xl p-3">
+                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Kde pomáhá</p>
+                      <p className="text-primary/80">{s.helpsWhen}</p>
+                    </div>
+                    <div className="card-pink p-3 rounded-xl">
+                      <p className="text-xs font-semibold text-primary/50 uppercase tracking-wider mb-1">Kde může škodit</p>
+                      <p className="text-primary/80">{s.risksWhen}</p>
+                    </div>
+                    <div className="bg-peach rounded-xl p-3">
+                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Kdy vytváří největší hodnotu</p>
+                      <p className="text-primary/80">{s.peakValue}</p>
+                    </div>
+                    <div className="card-pink p-3 rounded-xl">
+                      <p className="text-xs font-semibold text-orange uppercase tracking-wider mb-1">Pozor na</p>
+                      <p className="text-primary/80">{s.watchOut}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 16. CO ZATÍM NEVÍME */}
+        {report.unknowns?.length ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-4">Co zatím nevíme</h2>
+            <div className="card-pink p-6">
+              <ul className="space-y-3">
+                {report.unknowns.map((u, i) => (
+                  <li key={i} className="text-sm text-primary/80 flex items-start gap-3">
+                    <span className="text-primary/30 flex-shrink-0 mt-0.5 font-bold">?</span>{u}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ) : null}
+
+        {/* 17. PRVNÍ EXPERIMENTY */}
+        {report.experiments?.length ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-2">První experimenty</h2>
+            <p className="text-sm text-primary/60 mb-4">Ne doporučení — experimenty. Malé kroky, které ověří, co funguje.</p>
+            <div className="space-y-3">
+              {report.experiments.map((exp, i) => (
+                <div key={i} className="flex items-start gap-4 card p-5">
+                  <span className="w-7 h-7 rounded-full border-2 border-secondary flex-shrink-0 flex items-center justify-center text-secondary text-xs font-bold mt-0.5">
+                    {i + 1}
+                  </span>
+                  <p className="text-primary/80 text-sm leading-relaxed">{exp}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* 18. ZÁVĚREČNÉ ZRCADLO */}
         {report.closingMirror && (
           <section className="report-hero p-8">
             <h2 className="text-lg font-bold text-white/70 mb-4">Závěrečné zrcadlo</h2>
@@ -510,7 +650,7 @@ function ReportPageContent() {
           </section>
         )}
 
-        {/* 14. AHA MOMENTY */}
+        {/* 19. AHA MOMENTY */}
         {ahaThoughts.length > 0 && (
           <section>
             <h2 className="text-xl font-bold text-primary mb-4">Moje aha momenty</h2>
