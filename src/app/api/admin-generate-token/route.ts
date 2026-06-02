@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
               </p>
 
               <p style="margin:0;color:#58113c;font-size:16px;line-height:1.7;">
-                Těším se na výsledky,<br/>
+                Užij si objevování a těším se na zpětnou vazbu,<br/>
                 <strong>Lenka z Inspiraise</strong>
               </p>
             </td>
