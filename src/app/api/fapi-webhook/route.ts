@@ -58,7 +58,16 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const body = await req.json()
+    // FAPI posílá data jako form-urlencoded (ne JSON) — zvládáme obě varianty
+    const contentType = req.headers.get('content-type') || ''
+    let body: Record<string, unknown>
+    if (contentType.includes('application/json')) {
+      body = await req.json()
+    } else {
+      const text = await req.text()
+      const params = new URLSearchParams(text)
+      body = Object.fromEntries(params.entries())
+    }
     console.log('FAPI webhook payload:', JSON.stringify(body).slice(0, 500))
 
     // --- Parsování FAPI payloadu ---
