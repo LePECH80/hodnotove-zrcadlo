@@ -73,6 +73,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: true, status })
     }
 
+    // --- Filtrování podle produktu ---
+    // Zpracujeme pouze objednávky obsahující produkt Hodnotové zrcadlo (ID: 653924)
+    const ALLOWED_PRODUCT_ID = process.env.FAPI_PRODUCT_ID || '653924'
+    const items: Array<Record<string, unknown>> =
+      body.items ?? body.order?.items ?? body.orderItems ?? []
+    const hasProduct = items.some((item) => {
+      const id = String(item.product_id ?? item.productId ?? item.id ?? '')
+      return id === ALLOWED_PRODUCT_ID
+    })
+
+    if (items.length > 0 && !hasProduct) {
+      console.log(`FAPI webhook: jiný produkt (ne ${ALLOWED_PRODUCT_ID}), přeskakuji`)
+      return NextResponse.json({ ok: true, skipped: true, reason: 'different_product' })
+    }
+
     // Email zákazníka
     const email: string =
       body.email ??

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hodnotové zrcadlo™ – Osobní mapa hodnoty | Inspiraise</title>
+  <meta name="description" content="Vedená diagnostika na základě koučovací metodiky Lenky Pechrové. Objevte svou hodnotu za 45–60 minut a získejte osobní mapu hodnoty.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:    #58113c;
+      --secondary:  #8d175e;
+      --orange:     #f1905c;
+      --peach:      #f8f5f3;
+      --pink-light: #e4bdd1;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Geist', sans-serif;
+      color: var(--primary);
+      background: #fff;
+      line-height: 1.75;
+      font-size: 21px;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 100% 0%, rgba(141,23,94,.07) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 60% at 0% 100%, rgba(241,144,92,.05) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    /* ── GRADIENT TEXT ───────────────────────── */
+    .grad {
+      background: linear-gradient(100deg, var(--secondary) 0%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    p { margin-bottom: 1em; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+    .wrap--narrow { max-width: 700px; margin: 0 auto; padding: 0 24px; }
+
+    section { padding: 88px 0; }
+    section.alt { background: var(--peach); }
+    section.dark { background: var(--primary); color: #fff; }
+
+    /* ── TYPOGRAPHY ─────────────────────────── */
+    h1 { font-size: clamp(1.75rem, 4vw, 2.6rem); line-height: 1.2; font-weight: 900; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.25; font-weight: 800; margin-bottom: 20px; }
+    h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+
+    .label {
+      font-family: sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 18px;
+    }
+    .label--light { color: var(--pink-light); }
+
+    .divider {
+      width: 44px; height: 3px;
+      background: var(--orange);
+      border-radius: 2px;
+      margin: 20px 0 28px;
+    }
+
+    /* ── BUTTONS ─────────────────────────────── */
+    .btn {
+      display: inline-block;
+      background: var(--secondary);
+      color: #fff;
+      text-decoration: none;
+      padding: 18px 44px;
+      border-radius: 12px;
+      font-family: sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      transition: opacity .2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { opacity: .85; }
+    .btn.btn--lg { padding: 22px 56px; font-size: 1.1rem; }
+    .btn.btn--outline {
+      background: transparent;
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+    }
+    .btn.btn--outline:hover { background: var(--secondary); color: #fff; }
+    .btn.btn--white { background: #fff; color: var(--primary); }
+    .btn.btn--white:hover { opacity: .9; }
+
+    /* ── NAV ─────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--pink-light);
+      padding: 14px 0;
+    }
+    .nav__inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav__logo img { height: 32px; width: auto; display: block; }
+    .nav .btn { padding: 11px 26px; font-size: .88rem; }
+
+    /* ── HERO ─────────────────────────────────── */
+    .hero {
+      background: var(--primary);
+      color: #fff;
+      padding: 80px 0 0;
+      text-align: center;
+    }
+    .hero__brand {
+      font-family: sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--secondary);
+      display: inline-block;
+      padding: 8px 22px;
+      border-radius: 6px;
+      margin-bottom: 28px;
+    }
+    .hero h1 { color: #fff; margin-bottom: 28px; }
+    .hero__perex {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.80);
+      max-width: 620px;
+      margin: 0 auto 40px;
+    }
+    .hero__meta {
+      font-family: sans-serif;
+      font-size: .83rem;
+      color: var(--pink-light);
+      letter-spacing: .05em;
+      margin-top: 20px;
+      margin-bottom: 56px;
+    }
+    .hero__img {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .hero__img img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ── INTRO TEXT ──────────────────────────── */
+    .intro { padding: 72px 0; }
+    .intro__text { max-width: 660px; }
+    .intro__text p { font-size: 1.05rem; color: rgba(88,17,60,.80); }
+    .intro__text p strong { color: var(--primary); }
+
+    /* ── CHECKLIST ───────────────────────────── */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: #fff;
+      border: 1.5px solid var(--pink-light);
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+    .check-item__ico {
+      width: 22px; height: 22px; flex-shrink: 0;
+      background: var(--secondary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: .65rem; font-weight: 700; font-family: sans-serif;
+      margin-top: 1px;
+    }
+    .checklist-note {
+      margin-top: 28px;
+      font-style: italic;
+      color: var(--secondary);
+      font-size: .95rem;
+    }
+
+    /* ── HOW IT WORKS ────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .step { text-align: center; }
+    .step__num {
+      width: 52px; height: 52px;
+      background: var(--secondary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.25rem; font-weight: 800; font-family: sans-serif;
+      margin: 0 auto 18px;
+    }
+    .step__title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step__text { font-size: .88rem; color: rgba(88,17,60,.65); line-height: 1.65; }
+
+    .method-note {
+      margin-top: 48px;
+      background: #fff;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 14px 14px 0;
+      padding: 20px 24px;
+      font-size: .98rem;
+      color: var(--primary);
+    }
+
+    /* ── REPORT CONTENTS ─────────────────────── */
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .report-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: #fff;
+      border: 1.5px solid var(--pink-light);
+      border-radius: 14px;
+      padding: 18px 20px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+    .report-item__dot {
+      width: 10px; height: 10px; flex-shrink: 0;
+      background: var(--orange); border-radius: 50%;
+      margin-top: 6px;
+    }
+    /* FOTO INSTRUKCE: Ukázka reportu — screenshot z hotového reportu.
+       Ideální rozměr 880×520 px. Nahraď src níže. */
+    .report-preview {
+      width: 100%; max-width: 880px;
+      height: 480px;
+      background: var(--pink-light);
+      border-radius: 20px;
+      margin: 48px auto 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--secondary);
+      font-family: sans-serif; font-size: .82rem;
+      overflow: hidden;
+    }
+    .report-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+
+    /* ── BIO ─────────────────────────────────── */
+    .bio-wrap {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-top: 48px;
+    }
+    /* FOTO INSTRUKCE: Tvoje fotka — přirozená, lifestyle nebo profesionální.
+       Ideálně na výšku, cca 600×760 px. Nahraď src níže. */
+    .bio__photo {
+      width: 300px; height: 380px;
+      background: var(--pink-light);
+      border-radius: 20px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--secondary); font-family: sans-serif; font-size: .8rem; text-align: center; padding: 16px;
+    }
+    .bio__photo img { width: 100%; height: 100%; object-fit: cover; }
+    .bio__name-label { font-family: sans-serif; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--secondary); font-weight: 700; margin-bottom: 6px; }
+    .bio__name { font-size: 1.5rem; font-weight: 900; margin-bottom: 4px; }
+    .bio__title { font-family: sans-serif; font-size: .83rem; color: rgba(88,17,60,.55); margin-bottom: 20px; }
+    .bio__quote {
+      border-left: 3px solid var(--orange);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-style: italic;
+      font-size: .95rem;
+      color: var(--primary);
+      background: var(--peach);
+      border-radius: 0 10px 10px 0;
+    }
+    .bio__text { font-size: .92rem; color: rgba(88,17,60,.78); margin-bottom: 12px; line-height: 1.7; }
+    .bio__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .bio__tag {
+      background: var(--peach);
+      border: 1.5px solid var(--pink-light);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-family: sans-serif; font-size: .75rem;
+      color: var(--primary);
+    }
+
+    /* ── PRICING ─────────────────────────────── */
+    .pricing-box {
+      background: #fff;
+      border-radius: 24px;
+      padding: 56px 48px;
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 12px 60px rgba(88,17,60,.10);
+    }
+    .pricing-box__badge {
+      display: inline-block;
+      background: var(--peach);
+      border: 1.5px solid var(--pink-light);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-family: sans-serif; font-size: .75rem;
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 28px;
+    }
+    .pricing-box__price {
+      font-size: 2.6rem; font-weight: 800; line-height: 1;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .pricing-box__period {
+      font-family: sans-serif; font-size: .83rem;
+      color: rgba(88,17,60,.45);
+      margin-bottom: 32px;
+    }
+    .pricing-includes {
+      list-style: none;
+      text-align: left;
+      margin: 0 0 36px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .pricing-includes li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .95rem;
+    }
+    .pricing-includes__check {
+      color: var(--secondary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pricing-guarantee {
+      margin-top: 20px;
+      font-family: sans-serif;
+      font-size: .8rem;
+      color: rgba(88,17,60,.45);
+    }
+
+    /* ── UPSELL ──────────────────────────────── */
+    .upsell-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .upsell-card {
+      background: var(--peach);
+      border: 1.5px solid var(--pink-light);
+      border-radius: 20px;
+      padding: 36px;
+    }
+    .upsell-card__icon { font-size: 2rem; margin-bottom: 16px; }
+    .upsell-card p { font-size: .9rem; color: rgba(88,17,60,.70); margin-bottom: 24px; }
+    .upsell-card .btn { font-size: .88rem; padding: 12px 22px; }
+
+    /* ── FAQ ─────────────────────────────────── */
+    .faq { margin-top: 48px; }
+    .faq-item { border-bottom: 1px solid var(--pink-light); padding: 24px 0; }
+    .faq-item:first-child { border-top: 1px solid var(--pink-light); }
+    .faq-item h3 { font-size: 1rem; margin-bottom: 10px; }
+    .faq-item p { font-size: .93rem; color: rgba(88,17,60,.72); margin: 0; }
+
+    /* ── FOOTER ──────────────────────────────── */
+    .footer {
+      background: var(--primary);
+      color: rgba(255,255,255,.45);
+      padding: 40px 0;
+      text-align: center;
+      font-family: sans-serif;
+      font-size: .8rem;
+    }
+    .footer a { color: var(--pink-light); text-decoration: none; }
+    .footer a:hover { color: #fff; }
+    .footer__links { display: flex; justify-content: center; gap: 24px; margin-top: 10px; flex-wrap: wrap; }
+
+    /* ── PROBLÉM SEKCE ───────────────────────── */
+    .problem-text { max-width: 680px; }
+    .problem-text p { font-size: 1.05rem; color: rgba(88,17,60,.82); line-height: 1.85; }
+    .problem-text p + p { margin-top: 1.2em; }
+
+    /* ── ČÍSLOVANÉ KROKY ─────────────────────── */
+    .steps-num { display: flex; flex-direction: column; gap: 28px; margin-top: 40px; max-width: 680px; }
+    .step-num { display: flex; gap: 24px; align-items: flex-start; }
+    .step-num__n {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--secondary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-family: sans-serif; font-size: .9rem; font-weight: 800;
+    }
+    .step-num__body h3 { font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+    .step-num__body p { font-size: .95rem; color: rgba(88,17,60,.70); margin: 0; }
+
+    /* ── PROČ AI ─────────────────────────────── */
+    .ai-reasons { list-style: none; margin: 28px 0 0; display: flex; flex-direction: column; gap: 16px; max-width: 600px; }
+    .ai-reasons li { display: flex; gap: 16px; align-items: flex-start; font-size: 1rem; }
+    .ai-reasons__icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── PRO KOHO ────────────────────────────── */
+    .for-whom { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+    .for-whom__col { background: #fff; border: 1.5px solid var(--pink-light); border-radius: 20px; padding: 28px 28px; }
+    .for-whom__col h3 { font-size: .95rem; font-weight: 800; font-family: sans-serif; letter-spacing: .03em; margin-bottom: 18px; }
+    .for-whom__col--yes h3 { color: var(--secondary); }
+    .for-whom__col--no h3 { color: rgba(88,17,60,.45); }
+    .for-whom__item { display: flex; gap: 10px; font-size: .95rem; line-height: 1.55; margin-bottom: 12px; color: rgba(88,17,60,.80); }
+    .for-whom__item:last-child { margin-bottom: 0; }
+    .for-whom__dot { flex-shrink: 0; margin-top: 6px; width: 8px; height: 8px; border-radius: 50%; }
+    .for-whom__col--yes .for-whom__dot { background: var(--secondary); }
+    .for-whom__col--no .for-whom__dot { background: rgba(88,17,60,.25); }
+
+    /* ── CO SI ODNESEŠ ───────────────────────── */
+    .takeaways { list-style: none; margin: 32px 0 0; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+    .takeaway { display: flex; gap: 16px; align-items: flex-start; }
+    .takeaway__dot { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; flex-shrink: 0; margin-top: 8px; }
+    .takeaway p { font-size: 1rem; line-height: 1.6; color: rgba(88,17,60,.82); margin: 0; }
+
+    /* ── CENA ────────────────────────────────── */
+    .price-old { text-decoration: line-through; color: rgba(88,17,60,.35); font-size: 1.4rem; font-weight: 400; margin-right: 8px; }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 760px) {
+      section { padding: 60px 0; }
+      .hero { padding: 72px 0 52px; }
+      .checklist-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 28px; }
+      .report-grid { grid-template-columns: 1fr; }
+      .bio-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .bio__photo { width: 100%; height: 280px; }
+      .for-whom { grid-template-columns: 1fr; }
+      .pricing-box { padding: 40px 24px; }
+      .pricing-box__price { font-size: 3rem; }
+      .hero__img { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav__inner">
+      <a href="https://inspiraise.com" class="nav__logo">
+        <svg style="height:32px;width:auto;display:block;" viewBox="0 0 680.77 131.57" xmlns="http://www.w3.org/2000/svg"><g fill="#58113c"><rect x="0" y="27.11" width="17.91" height="74.61"/><path d="M35.21,27.11h17.61v12.24c4.48-7.76,12.09-13.73,24.47-13.73,15.07,0,28.95,8.8,28.95,30.14v45.96h-17.61v-40.89c0-10.74-4.33-18.8-16.12-18.8-10.89,0-19.7,7.61-19.7,21.94v37.75h-17.61V27.11Z"/><path d="M118.78,79.19l16.56-3.58c.75,9.55,10.15,13.88,19.4,13.88,7.76,0,13.58-3.28,13.58-8.51,0-5.97-6.57-7.76-16.86-10.3-18.8-4.77-28.95-10.45-28.95-23.88s12.09-21.19,30-21.19c15.52,0,29.7,7.46,31.64,20.74l-16.41,3.58c-1.49-6.86-6.72-10.74-15.37-10.74-7.01,0-12.09,2.83-12.09,7.61,0,5.67,8.36,8.06,21.19,10.89,12.83,2.84,24.92,8.8,24.92,22.53s-13.28,22.98-31.79,22.98c-20.44,0-34.17-9.7-35.81-24.03Z"/><path d="M199.65,27.11h17.61v13.13c4.63-7.76,12.68-14.62,26.71-14.62,18.8,0,35.52,14.92,35.52,38.95s-16.57,38.65-35.52,38.65c-12.98,0-23.13-6.57-26.71-14.48v42.83h-17.61V27.11ZM261.43,64.56c0-13.28-9.1-22.68-21.79-22.68s-22.09,9.55-22.09,22.68,9.4,22.38,22.09,22.38,21.79-9.4,21.79-22.38Z"/><path d="M405.01,80.88c0-16.12,13.73-25.52,37.6-25.52h13.73v-1.49c0-8.95-5.22-14.48-15.82-14.48-8.8,0-14.77,4.03-17.01,11.79l-17.61-4.33c3.88-13.58,17.01-21.49,34.92-21.49,22.38,0,33.28,12.68,33.28,28.35v33.43h8.51v14.33h-14.77c-7.16,0-10.15-2.69-10.15-9.55v-2.98c-5.07,8.66-15.22,14.03-27.01,14.03-16.12,0-25.67-9.55-25.67-22.09ZM456.34,68.94v-1.34h-11.79c-15.07,0-21.64,4.33-21.64,12.09,0,5.82,4.78,9.7,12.09,9.7,12.98,0,21.34-9.85,21.34-20.44Z"/><rect x="495.58" y="26.86" width="17.91" height="74.61"/><path d="M526.92,78.94l16.56-3.58c.75,9.55,10.15,13.88,19.4,13.88,7.76,0,13.58-3.28,13.58-8.51,0-5.97-6.57-7.76-16.86-10.3-18.8-4.77-28.95-10.45-28.95-23.88s12.09-21.19,30-21.19c15.52,0,29.7,7.46,31.64,20.74l-16.41,3.58c-1.49-6.86-6.72-10.74-15.37-10.74-7.01,0-12.09,2.83-12.09,7.61,0,5.67,8.36,8.06,21.19,10.89,12.83,2.84,24.92,8.8,24.92,22.53s-13.28,22.98-31.79,22.98c-20.44,0-34.17-9.7-35.81-24.03Z"/><path d="M604.21,64.61c0-22.24,16.12-39.25,39.25-39.25s37.31,16.27,37.31,38.5c0,2.09-.15,4.33-.45,6.57h-57.9c.9,12.24,10.15,17.91,21.34,17.91,9.7,0,16.27-4.03,19.4-9.55l15.37,4.92c-5.37,11.64-17.16,19.25-35.07,19.25-23.13,0-39.25-15.97-39.25-38.35ZM643.46,40.29c-11.34,0-19.4,6.42-21.04,16.71h41.34c-1.19-10.15-9.1-16.71-20.29-16.71Z"/><rect x="0" y=".25" width="17.91" height="17.91"/><rect x="495.58" width="17.91" height="17.91"/><path d="M381.94,75c3.66-1.93,6.69-4.21,9.11-6.83,2.42-2.55,4.25-5.4,5.49-8.54,1.24-3.14,1.83-6.37,1.76-9.68-.14-2.76-.71-5.42-1.71-7.97-1-2.55-2.4-4.83-4.19-6.83-3.93-4.35-8.94-6.94-15.01-7.77-2.21-.34-4.28-.52-6.21-.52-4.83,0-9.63.79-14.39,2.38-3.8,1.38-7.25,3.14-10.35,5.28-3.31,2.21-6.42,5.04-9.32,8.49-2.62,3.18-4.97,6.8-7.04,10.87,0,0-5.77,11.9-6.63,15.22l-.73,2.07c-1.93,5.66-3.42,11.17-4.45,16.51-1.04,5.35-1.55,10.03-1.55,14.03h16.15c0-3.04.45-6.78,1.35-11.23.9-4.45,2.14-9.02,3.73-13.72,2,.69,3.97,1.31,5.9,1.86,2.18.57,4.36.99,6.54,1.3.05,3.68.69,7.05,1.95,10.09,1.31,3.18,3.21,5.87,5.69,8.08,3.73,3.31,8.08,5.11,13.05,5.38.34.07.9.1,1.66.1,3.17,0,6.42-.55,9.73-1.66,2.62-.9,4.97-1.93,7.04-3.11,2.07-1.17,3.45-2.04,4.14-2.59l-9.63-13.05c-2.14,1.52-4.38,2.66-6.73,3.42-1.66.55-3.14.83-4.45.83-1.52,0-2.9-.48-4.14-1.45-1.39-1.32-2.1-3.37-2.16-6.14,1.07-.17,2.14-.36,3.2-.59,4.42-.9,8.49-2.31,12.22-4.24ZM366.41,63.41c-2.76.62-5.56.93-8.39.93-3.38,0-6.73-.45-10.04-1.35-1.1-.28-2.38-.65-3.83-1.14,1.72-3.52,3.52-6.35,5.38-8.49,3.45-4.21,7.63-7.14,12.53-8.8,3.11-1.04,6.14-1.55,9.11-1.55.34,0,1.66.1,3.93.31,2.14.28,3.87,1.14,5.18,2.59,1.17,1.31,1.76,2.8,1.76,4.45.14,2.55-1.07,5.07-3.62,7.56-2.55,2.48-6.56,4.32-12.01,5.49Z"/><rect x="293.06" y=".25" width="17.91" height="17.91"/><path d="M306.51,101.72c0-4.1.53-8.93,1.59-14.37.73-3.76,1.7-7.64,2.87-11.57V27.11h-17.91v74.61h13.45Z"/></g></svg>
+      </a>
+      <a href="#koupit" class="btn">Chci své Hodnotové zrcadlo →</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero__brand">Hodnotové zrcadlo™</div>
+    <h1>Co když to, co považuješ za <span class="grad">„nic extra"</span>, je přesně to, za co ti lidi budou platit?</h1>
+    <p class="hero__perex">
+      Za 60 minut zjistíš, v čem je tvoje skutečná hodnota.<br>
+      Ne podle testu osobnosti. Podle důkazů z tvého vlastního života.
+    </p>
+    <a href="#koupit" class="btn btn--lg">Chci svoji mapu hodnoty →</a>
+    <p class="hero__meta">Zaváděcí cena 1 900 Kč &nbsp;·&nbsp; jednorázový přístup &nbsp;·&nbsp; 45–60 minut</p>
+  </div>
+
+  <div class="hero__img">
+    <img src="https://inspiraise.com/wp-content/uploads/2026/06/Hodnotove_zrcadlo_vizual_.png" alt="Hodnotové zrcadlo™ – ukázka produktu na různých zařízeních">
+  </div>
+</section>
+
+
+
+
+<!-- ══════════════════════════════════════════
+     PROBLÉM / NAPĚTÍ
+═══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="label">Poznáváš se?</p>
+    <h2>Znáš ten pocit?</h2>
+
+    <div class="problem-text">
+      <p>Jsi schopná. Lidi za tebou chodí pro radu, pro pohled, pro to, abys jim něco rozsekla. A ty jim pomůžeš - většinou tak rychle a samozřejmě, že si ani nevšimneš, že jsi zrovna udělala něco, co druhý nedokáže.</p>
+      <p>A pak přijde otázka „v čem jsi vlastně dobrá?" — a ty se zasekneš.</p>
+      <p>Třeba zkoušíš různé směry a u žádného pořádně nevydržíš, protože nemáš jistotu, že <em>tohle</em> je ono.</p>
+      <p>Nebo máš dobrou práci, dobré peníze, a přesto v tobě hlodá, že bys mohla na sebe — jenže když dojde na „a co bys nabízela?", zamrazí tě. Protože všechno, co umíš, ti přijde tak obyčejné, že si říkáš: <em>„to přece umí každej."</em></p>
+      <p><strong>Tady je problém: právě to, co ti přijde samozřejmé, většinou samozřejmé není.</strong> Je to <span class="grad">slepá skvrna</span>. A dokud ji nevidíš, nemůžeš na ní stavět.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CO TO JE
+═══════════════════════════════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <p class="label">Co to je</p>
+    <h2>Hodnotové zrcadlo není test osobnosti ani dotazník.</h2>
+
+    <div class="problem-text">
+      <p>Je to hloubkový rozhovor — vedu tě jím já, ve formě AI kouče, kterého jsem postavila na svojí vlastní koučovací metodě. Stejné téma řeším s klienty běžně. Tohle je zkratka k tomu samému.</p>
+      <p>Neptám se tě, „jaký jsi typ". Vytahuju z tebe <strong>konkrétní důkazy</strong> — situace, kdy jsi někomu reálně pomohla, něco rozsekla, něco viděla dřív než ostatní. A z těch důkazů ti ukážu vzorec, který sama na sobě přehlížíš.</p>
+      <p>Na konci nedostaneš obecný profil. Dostaneš <strong><span class="grad">pojmenování své skutečné silné stránky</span> — opřené o tvoje vlastní příběhy, ne o teorii.</strong></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     JAK TO FUNGUJE
+═══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="label">Proces</p>
+    <h2>Jak to funguje</h2>
+
+    <div class="steps-num">
+      <div class="step-num">
+        <div class="step-num__n">1</div>
+        <div class="step-num__body">
+          <h3>Koupíš a dostaneš svůj přístup.</h3>
+          <p>Po platbě ti přijde unikátní odkaz na tvoji stránku. Žádné zakládání účtu, žádné heslo. Spustíš, kdy se ti to hodí.</p>
+        </div>
+      </div>
+      <div class="step-num">
+        <div class="step-num__n">2</div>
+        <div class="step-num__body">
+          <h3>Projdeš rozhovorem (45–60 minut).</h3>
+          <p>Vedu tě pěti fázemi. Neodpovídáš hezky — odpovídáš upřímně. Čím otevřeněji, tím přesnější zrcadlo dostaneš. Jsi sama, bez ostychu, ve svém tempu.</p>
+        </div>
+      </div>
+      <div class="step-num">
+        <div class="step-num__n">3</div>
+        <div class="step-num__body">
+          <h3>Dostaneš svoji Osobní mapu hodnoty.</h3>
+          <p>Konkrétní pojmenování toho, v čem je tvoje síla, kde vzniká tvoje nejvyšší hodnota a první směr, kterým s tím můžeš jít dál.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PROČ S AI
+═══════════════════════════════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <p class="label">Proč AI</p>
+    <h2>Proč s AI, a ne jen test zdarma na internetu?</h2>
+
+    <div class="problem-text">
+      <p>Testů osobnosti najdeš na internetu spoustu. Vyplníš dotazník, vyjede ti nálepka: čtyři písmena nebo pár hezkých slov. A ty zůstaneš stát se stejnou otázkou jako předtím: <em>a co s tím?</em></p>
+      <p>Hodnotové zrcadlo funguje jinak. <strong>Nevyhodnocuje tě podle škály. Jde po tvých konkrétních příbězích</strong> — a tam, kde se opakuje stejný vzorec, ti ho ukáže. To, co je založené na důkazech z tvého života, neodmávneš větou „to mi nesedí".</p>
+      <p>A proč AI? Protože ti dává to, co u člověka nemáš:</p>
+    </div>
+
+    <ul class="ai-reasons">
+      <li>
+        <span class="ai-reasons__icon">🔒</span>
+        <div><strong>Soukromí.</strong> Řekneš nahlas věci, které bys koučovi naživo neřekla.</div>
+      </li>
+      <li>
+        <span class="ai-reasons__icon">⏱</span>
+        <div><strong>Tvoje tempo.</strong> Žádný stres, žádné hodiny v kalendáři, žádné „za jak dlouho to skončí".</div>
+      </li>
+      <li>
+        <span class="ai-reasons__icon">💬</span>
+        <div><strong>Bez ostychu.</strong> Nikdo tě nehodnotí. Můžeš být úplně bez filtru.</div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     BIO — LENKA
+═══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="label">Kdo za tím stojí</p>
+    <h2>Proč zrovna já?</h2>
+
+    <div class="bio-wrap">
+      <div class="bio__photo">
+        <img src="https://inspiraise.com/wp-content/uploads/2026/04/LP_profle-pic.png" alt="Lenka Pechrová">
+      </div>
+
+      <div class="bio__content">
+        <p class="bio__name-label">Inspiraise</p>
+        <h3 class="bio__name">Lenka Pechrová</h3>
+        <p class="bio__title">Zakladatelka Inspiraise · ICF koučka · NLP practitioner</p>
+
+        <p class="bio__text">
+          Za sebou mám přes dvacet let v korporátu — došla jsem až na pozici CEO, kde jsem vedla česko-slovenské zastoupení firmy. Vím, jaké to je nést odpovědnost, rozhodovat a vést lidi.
+        </p>
+        <p class="bio__text">
+          A pak jsem udělala přesně ten skok, kterého se možná bojíš: odešla jsem z jistoty a šla na sebe.
+        </p>
+        <p class="bio__text">
+          Takže když mluvím o tom pocitu „jsem schopná, ale nevím, co vlastně nabízet" — nemluvím z teorie. Sama jsem si tím prošla. A za roky koučování jsem ten samý vzorec viděla u desítek schopných lidí: to nejcennější, co umí, berou jako samozřejmost.
+        </p>
+        <p class="bio__text">
+          Hodnotové zrcadlo je postavené na metodě, kterou používám s klienty naživo. Vložila jsem do něj přesně to, na co se ptám já — jen tak, aby sis tím mohla projít sama, ve svém čase a beze svědků.
+        </p>
+        <p class="bio__text" style="font-style:italic; color:rgba(88,17,60,.60);">
+          Mimo práci běhám ultramaratony. Naučily mě jednu věc: hranice, kde si myslíš, že končíš, je skoro vždycky dál, než věříš. Platí to i o tvojí hodnotě.
+        </p>
+
+        <div class="bio__tags">
+          <span class="bio__tag">20+ let praxe</span>
+          <span class="bio__tag">ICF ACC koučka</span>
+          <span class="bio__tag">NLP practitioner</span>
+          <span class="bio__tag">Ex-CEO korporátu</span>
+          <span class="bio__tag">Podnikání na sebe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PRO KOHO TO JE
+═══════════════════════════════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <p class="label">Pro koho to je</p>
+    <h2>Je to pro tebe?</h2>
+
+    <div class="for-whom">
+      <div class="for-whom__col for-whom__col--yes">
+        <h3>✓ &nbsp;Je to pro tebe, pokud:</h3>
+        <div class="for-whom__item"><span class="for-whom__dot"></span>jsi schopná, ale neumíš pojmenovat, v čem konkrétně</div>
+        <div class="for-whom__item"><span class="for-whom__dot"></span>zkoušíš směry a hledáš ten jeden, kterému budeš fakt věřit</div>
+        <div class="for-whom__item"><span class="for-whom__dot"></span>zvažuješ odchod z korporátu na sebe, ale brzdí tě „co bych vlastně nabízela"</div>
+        <div class="for-whom__item"><span class="for-whom__dot"></span>víš, že v tobě něco je — jen to potřebuješ vidět zvenčí a pojmenovat</div>
+      </div>
+      <div class="for-whom__col for-whom__col--no">
+        <h3 style="color:rgba(88,17,60,.45);">✗ &nbsp;Není to pro tebe, pokud:</h3>
+        <div class="for-whom__item" style="color:rgba(88,17,60,.55);"><span class="for-whom__dot"></span>čekáš hotový byznysplán nebo marketingovou strategii</div>
+        <div class="for-whom__item" style="color:rgba(88,17,60,.55);"><span class="for-whom__dot"></span>nejsi ochotná být k sobě upřímná</div>
+        <div class="for-whom__item" style="color:rgba(88,17,60,.55);"><span class="for-whom__dot"></span>chceš jen potvrdit, co už víš</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     CO SI ODNESEŠ
+═══════════════════════════════════════════ -->
+<section>
+  <div class="wrap">
+    <p class="label">Výstup</p>
+    <h2>Co si odneseš</h2>
+    <p style="max-width:660px; color:rgba(88,17,60,.80);">Na konci budeš mít <strong>Osobní mapu hodnoty</strong> — a v ní:</p>
+
+    <ul class="takeaways">
+      <li class="takeaway">
+        <span class="takeaway__dot"></span>
+        <p><strong>Konkrétní silné stránky</strong> pojmenované na základě tvých vlastních příběhů — ne obecných škatulek.</p>
+      </li>
+      <li class="takeaway">
+        <span class="takeaway__dot"></span>
+        <p><strong>Vzorec</strong>, který se ti opakuje napříč prací i životem — a který jsi sama brala jako samozřejmost.</p>
+      </li>
+      <li class="takeaway">
+        <span class="takeaway__dot"></span>
+        <p><strong>Zónu tvojí nejvyšší hodnoty</strong> — kde jsi pro druhé těžko nahraditelná.</p>
+      </li>
+      <li class="takeaway">
+        <span class="takeaway__dot"></span>
+        <p><strong>První směr</strong>, kterým můžeš svoji hodnotu přetavit v něco konkrétního.</p>
+      </li>
+    </ul>
+
+    <p style="margin-top:32px; font-size:1.05rem; color:rgba(88,17,60,.80); max-width:660px;">Přestaneš se ptát „v čem jsem dobrá?" — protože to budeš mít <span class="grad">černé na bílém</span>, opřené o důkazy.</p>
+
+    <div style="margin-top:48px; border-radius:20px; overflow:hidden; box-shadow:0 16px 56px rgba(88,17,60,.15);">
+      <img src="https://inspiraise.com/wp-content/uploads/2026/06/hodnotove_zrcadlo_ukazka.png" alt="Ukázka osobní mapy hodnoty – výstupní report" style="width:100%; height:auto; display:block;">
+    </div>
+    <p style="margin-top:16px; font-family:sans-serif; font-size:.8rem; color:rgba(88,17,60,.4); text-align:center; font-style:italic;">
+      Anonymizovaná ukázka výstupního reportu
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     PRICING
+═══════════════════════════════════════════ -->
+<section class="alt" id="koupit">
+  <div class="wrap">
+    <p class="label" style="text-align:center;">Hodnotové zrcadlo™</p>
+    <h2 style="text-align:center; font-size:1.6rem;">Chci svoji mapu hodnoty</h2>
+
+    <div class="pricing-box">
+      <div class="pricing-box__badge">Zaváděcí cena</div>
+
+      <div class="pricing-box__price">
+        <span class="price-old">2 900 Kč</span>1 900 Kč
+      </div>
+      <p class="pricing-box__period">Zaváděcí cenu držím jen po dobu spuštění. Pak jde nahoru.</p>
+
+      <ul class="pricing-includes">
+        <li><span class="pricing-includes__check">✓</span>Jednorázový přístup k plné diagnostice</li>
+        <li><span class="pricing-includes__check">✓</span>45–60 minut hloubkového rozhovoru</li>
+        <li><span class="pricing-includes__check">✓</span>Tvoje Osobní mapa hodnoty na konci</li>
+        <li><span class="pricing-includes__check">✓</span>Bez zakládání účtu — spustíš na jeden klik</li>
+      </ul>
+
+      <!-- FAPI ODKAZ: Nahraď href za svůj platební odkaz z FAPI -->
+      <a href="#FAPI_ODKAZ_ZDE" class="btn btn--lg" style="width:100%; text-align:center; display:block;">
+        Chci svoji mapu hodnoty →
+      </a>
+
+      <p class="pricing-guarantee">🔒 Bezpečná platba · Přístup dostaneš emailem ihned po zaplacení</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <p class="label">Otázky</p>
+    <h2>Možná tě napadá...</h2>
+
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Jak dlouho to trvá?</h3>
+        <p>45 až 60 minut, najednou. Doporučuju si na to vyhradit klid — vyplatí se to.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Co když mi to nic nového neřekne?</h3>
+        <p>Zrcadlo nepracuje s obecnými frázemi. Jde po tvých konkrétních situacích. To, co ti ukáže, vyjde z toho, co sama řekneš — takže to nebude teorie odněkud, ale tvoje vlastní data, jen poskládaná tak, abys uviděla vzorec.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Je to fakt jen rozhovor s AI? Není to neosobní?</h3>
+        <p>Vedla jsem ten rozhovor přesně podle metody, kterou používám s klienty. AI ti navíc dá soukromí a tempo, které naživo nemáš. Většina lidí je překvapená, jak hluboko to jde.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Co s tou mapou pak udělám?</h3>
+        <p>Dostaneš první směr, kterým jít. Pokud to budeš chtít dotáhnout do konkrétní nabídky a ceny, ozvu se ti s možností, jak na tom pokračovat spolu — ale to je až tvoje volba, ne podmínka.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Můžu se k tomu vrátit?</h3>
+        <p>Je to jednorázový přístup k jednomu rozhovoru. Mapu hodnoty si ale odneseš a můžeš se k ní vracet, kdykoli budeš potřebovat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════ -->
+<section class="dark">
+  <div class="wrap" style="text-align:center;">
+    <p class="label label--light">Hodnotové zrcadlo™</p>
+    <h2 style="color:#fff; margin-bottom:28px;">Jsi výjimečná.<br>Jen to zatím nevidíš černé na bílém.</h2>
+    <div style="max-width:580px; margin:0 auto 40px; color:rgba(255,255,255,.75); font-size:1.05rem; line-height:1.85;">
+      <p>Většina schopných lidí prochází životem s pocitem, že na nich není nic výjimečného — protože to nejcennější, co umí, jim přijde úplně obyčejné.</p>
+      <p style="margin-top:16px;">Tak se honí za dalšími kurzy, certifikáty a výcviky v naději, že to „ono" leží někde tam venku. Jenže ono to tam není. Bohatě si vystačíš s tím, co už umíš.</p>
+      <p style="margin-top:16px;">Hodnotové zrcadlo ti ukáže, že na tobě výjimečného je. A dá ti to černé na bílém.</p>
+    </div>
+    <!-- FAPI ODKAZ: Nahraď href za svůj platební odkaz z FAPI -->
+    <a href="#FAPI_ODKAZ_ZDE" class="btn btn--white btn--lg">Chci svoji mapu hodnoty →</a>
+    <p style="margin-top:20px; font-family:sans-serif; font-size:.8rem; color:rgba(255,255,255,.35);">
+      Zaváděcí cena 1 900 Kč · 45–60 minut · tvoje Osobní mapa hodnoty na konci
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <p>© 2026 Inspiraise s.r.o.</p>
+    <div class="footer__links">
+      <a href="https://inspiraise.com">inspiraise.com</a>
+      <a href="https://inspiraise.com/gdpr/">Ochrana osobních údajů</a>
+      <a href="https://inspiraise.com/wp-content/uploads/2026/06/VOP_Inspiraise_FINAL_2026.pdf" target="_blank" rel="noopener">Obchodní podmínky</a>
+      <a href="mailto:lenka@inspiraise.com">lenka@inspiraise.com</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

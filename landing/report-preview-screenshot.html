@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ukázka reportu</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, serif;
+      background: #f8f5f3;
+      color: #58113c;
+      padding: 32px;
+      width: 1100px;
+    }
+
+    /* HERO KARTA */
+    .hero-card {
+      background: #58113c;
+      border-radius: 20px;
+      padding: 40px 48px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .hero-label {
+      font-family: sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #e4bdd1;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .hero-card h1 {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 24px;
+    }
+    .hero-quote {
+      border-left: 4px solid #f1905c;
+      padding: 14px 20px;
+      font-style: italic;
+      font-size: 16px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 20px;
+    }
+    .hero-summary {
+      font-size: 14px;
+      color: rgba(255,255,255,.72);
+      line-height: 1.7;
+    }
+
+    /* DVOUSLOUPCOVÝ LAYOUT */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* KARTY */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+    }
+    .card-pink {
+      background: #fff0f7;
+      border-radius: 16px;
+      padding: 24px 28px;
+    }
+    .section-label {
+      font-family: sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #8d175e;
+      margin-bottom: 14px;
+    }
+    .card h3 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+    .card p, .card-pink p { font-size: 13px; line-height: 1.6; color: rgba(88,17,60,.75); margin-bottom: 8px; }
+    .card p:last-child, .card-pink p:last-child { margin-bottom: 0; }
+
+    /* SILNÉ JÁDRO */
+    .strength {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+    .strength-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .strength-header h3 { font-size: 15px; font-weight: 800; }
+    .strength-score {
+      font-family: sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8d175e;
+    }
+    .progress-bar-bg {
+      background: #e4bdd1;
+      border-radius: 4px;
+      height: 5px;
+      margin-bottom: 14px;
+    }
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #8d175e, #f1905c);
+      border-radius: 4px;
+      height: 5px;
+    }
+    .strength p { font-size: 13px; line-height: 1.6; color: rgba(88,17,60,.75); margin-bottom: 10px; }
+    .evidence-label {
+      font-family: sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #8d175e;
+      margin-bottom: 6px;
+    }
+    .evidence-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(88,17,60,.65);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+    .evidence-dot { color: #f1905c; flex-shrink: 0; font-size: 10px; margin-top: 3px; }
+    .why-matters {
+      font-size: 12px;
+      color: #8d175e;
+      font-style: italic;
+      margin-top: 8px;
+    }
+
+    /* ENERGIE */
+    .energy-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .energy-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(88,17,60,.80);
+      margin-bottom: 8px;
+    }
+    .energy-icon { flex-shrink: 0; font-size: 11px; margin-top: 3px; }
+
+    /* VZORCE */
+    .pattern {
+      border-left: 3px solid #f1905c;
+      padding: 12px 16px;
+      background: #f8f5f3;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 10px;
+    }
+    .pattern h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .pattern p { font-size: 12px; color: rgba(88,17,60,.65); line-height: 1.55; }
+
+    /* WATERMARK */
+    .watermark {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-family: sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(88,17,60,.25);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero-card">
+    <p class="hero-label">Osobní mapa hodnoty · Inspiraise</p>
+    <h1>Hodnotové zrcadlo</h1>
+    <div class="hero-quote">
+      „Tvoje největší hodnota nespočívá v tom, co umíš udělat - ale v tom, že dokážeš vidět řešení tam, kde ostatní ještě vidí jen chaos."
+    </div>
+    <p class="hero-summary">
+      Napříč rozhovorem se opakoval jeden vzorec: rychlá orientace ve složitých situacích, schopnost pojmenovat podstatu a dostat druhé lidi z přemýšlení do akce. To, co bereš jako samozřejmost, je pro ostatní vzácná schopnost.
+    </p>
+  </div>
+
+  <!-- SILNÁ JÁDRA -->
+  <p class="section-label" style="margin-bottom:14px; padding-left:4px;">Silné jádro expertízy</p>
+
+  <div class="strength">
+    <div class="strength-header">
+      <h3>1. Diagnostický pohled</h3>
+      <span class="strength-score">9 / 10</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:90%"></div></div>
+    <p>Přirozeně vidíš, kde je skutečný problém - i když ho druhý člověk neumí pojmenovat. Neřešíš symptomy, ale příčiny. Tato schopnost tě dělá nenahraditelnou v momentech, kdy je situace nepřehledná.</p>
+    <p class="evidence-label">Důkazy z rozhovoru</p>
+    <div class="evidence-item"><span class="evidence-dot">◆</span>„Přišla za mnou kolegyně s pocitem, že projekt nefunguje. Za 20 minut jsme přišly na to, že problém je jinde, než si myslela."</div>
+    <div class="evidence-item"><span class="evidence-dot">◆</span>Opakovaně zmiňovaná situace: kamarádky i klienti říkají, že po rozhovoru vidí věci jinak než předtím.</div>
+    <p class="why-matters">Proč je to hodnota: Lidé platí za jasno, ne za informace. Ty ho dokážeš dodat rychle.</p>
+  </div>
+
+  <div class="strength">
+    <div class="strength-header">
+      <h3>2. Aktivace k rozhodnutí</h3>
+      <span class="strength-score">8 / 10</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:80%"></div></div>
+    <p>Nezůstáváš u analýzy. Máš přirozenou tendenci dotáhnout rozhovor nebo situaci k rozhodnutí nebo dalšímu kroku. Lidé po setkání s tebou vědí, co mají udělat.</p>
+    <div class="evidence-item"><span class="evidence-dot">◆</span>„Vždy si říkám, že dokud nevyjde konkrétní krok, schůzka jako by neproběhla."</div>
+    <div class="evidence-item"><span class="evidence-dot">◆</span>Zmíněno třikrát různými slovy: lidé od tebe odcházejí s plánem, ne s otázkami.</div>
+    <p class="why-matters">Proč je to hodnota: Analýza bez akce je jen teorie. Ty propojuješ obojí.</p>
+  </div>
+
+  <!-- ENERGIE -->
+  <div class="energy-row">
+    <div class="card-pink">
+      <p class="section-label">↓ Vysává tě</p>
+      <div class="energy-item"><span class="energy-icon">·</span>Opakující se schůzky bez výsledku a jasného závěru</div>
+      <div class="energy-item"><span class="energy-icon">·</span>Práce s lidmi, kteří nechtějí změnu, jen potvrzení</div>
+      <div class="energy-item"><span class="energy-icon">·</span>Detailní administrativní procesy bez strategického přesahu</div>
+    </div>
+    <div class="card">
+      <p class="section-label">↑ Ožíváš v</p>
+      <div class="energy-item"><span class="energy-icon">◆</span>Rozhovorech, kde se na konci něco pohne</div>
+      <div class="energy-item"><span class="energy-icon">◆</span>Situacích, kde je třeba rychle zorientovat v nepořádku</div>
+      <div class="energy-item"><span class="energy-icon">◆</span>Práci s lidmi, kteří jsou ochotni jít do hloubky</div>
+    </div>
+  </div>
+
+  <!-- VZORCE -->
+  <p class="section-label" style="margin-bottom:14px; padding-left:4px;">Opakující se vzorce</p>
+  <div class="pattern">
+    <h4>Chaos → jasný směr</h4>
+    <p>Opakovaně se ukázalo, že největší dopad přichází v momentě, kdy je situace nepřehledná pro ostatní. Právě tam tvoje přirozenost nabývá největší hodnoty.</p>
+  </div>
+  <div class="pattern">
+    <h4>Zlehčování přirozeného talentu</h4>
+    <p>Schopnosti, které ostatní oceňují nejvíc, ty pojmenováváš slovy jako „to přece umí každý" nebo „já to jen nějak vidím". Toto je přesně místo, kde se skrývá hodnota.</p>
+  </div>
+
+  <div class="watermark">Inspiraise · Osobní mapa hodnoty</div>
+
+</body>
+</html>
