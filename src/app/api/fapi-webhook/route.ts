@@ -227,6 +227,63 @@ export async function POST(req: NextRequest) {
     // --- Přidej do Ecomailu (pokud je nastaven) ---
     await addToEcomail(email, firstName, lastName)
 
+    // --- Konzultace: pošli email s rezervačním odkazem ---
+    const hasKonzultace = items.some((item: any) => String(item.code) === '653939')
+    const konzultaceUrl = process.env.FAPI_KONZULTACE_URL || 'https://scheduler.zoom.us/lenka-pechrov'
+
+    if (hasKonzultace) {
+      await resend.emails.send({
+        from: 'Lenka z Inspiraise <diagnostika@inspiraise.com>',
+        to: email,
+        subject: 'Rezervuj si termín konzultace 🗓',
+        html: `
+<!DOCTYPE html>
+<html lang="cs">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f8f5f3;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f5f3;padding:40px 20px;">
+  <tr><td align="center">
+    <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+      <tr><td style="background-color:#58113c;border-radius:14px 14px 0 0;padding:32px 40px;text-align:center;">
+        <p style="margin:0 0 10px;color:#e4bdd1;font-size:13px;letter-spacing:4px;text-transform:uppercase;font-family:sans-serif;font-weight:600;">Inspiraise</p>
+        <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:normal;line-height:1.4;">Z hodnoty do praxe · 1:1 konzultace</h1>
+      </td></tr>
+      <tr><td style="background-color:#ffffff;padding:40px;border-radius:0 0 14px 14px;">
+        <p style="margin:0 0 20px;color:#58113c;font-size:16px;line-height:1.7;">
+          Ahoj ${vocativeName || firstName || ''},
+        </p>
+        <p style="margin:0 0 20px;color:#58113c;font-size:16px;line-height:1.7;">
+          skvělá volba! Až dokončíš svoji Osobní mapu hodnoty, rezervuj si termín naší 1:1 konzultace.
+          Projdeme ji společně a převedeme výstupy do konkrétních kroků pro tvoji situaci.
+        </p>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr><td align="center" style="padding:12px 0 36px;">
+            <a href="${konzultaceUrl}"
+               style="background-color:#8d175e;color:#ffffff;text-decoration:none;padding:16px 40px;border-radius:10px;font-size:16px;font-weight:600;font-family:sans-serif;display:inline-block;line-height:1;">
+              &#8594;&nbsp;&nbsp;Rezervovat termín konzultace
+            </a>
+          </td></tr>
+        </table>
+        <p style="margin:0;color:#58113c;font-size:16px;line-height:1.7;">
+          Těším se na setkání!<br/>
+          <strong>Lenka z Inspiraise</strong>
+        </p>
+      </td></tr>
+      <tr><td style="padding:24px 0 0;text-align:center;">
+        <p style="margin:0;color:#58113c60;font-size:12px;font-family:sans-serif;">
+          Inspiraise s.r.o. ·
+          <a href="https://inspiraise.com" style="color:#8d175e;text-decoration:none;">inspiraise.com</a>
+        </p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`,
+      })
+      console.log(`Konzultace email odeslán pro ${email}`)
+    }
+
     console.log(`FAPI webhook: token vygenerován pro ${email}`)
     return NextResponse.json({ ok: true, email })
 
