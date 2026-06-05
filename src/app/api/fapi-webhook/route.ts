@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
 
     // FAPI posílá data jako form-urlencoded (ne JSON) — zvládáme obě varianty
     const contentType = req.headers.get('content-type') || ''
-    let body: Record<string, unknown>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let body: any
     if (contentType.includes('application/json')) {
       body = await req.json()
     } else {
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
     // --- Filtrování podle produktu ---
     // Zpracujeme pouze objednávky obsahující produkt Hodnotové zrcadlo (ID: 653924)
     const ALLOWED_PRODUCT_ID = process.env.FAPI_PRODUCT_ID || '653924'
-    const items: Array<Record<string, unknown>> =
+    const items: any[] =
       body.items ?? body.order?.items ?? body.orderItems ?? []
     const hasProduct = items.some((item) => {
       const id = String(item.product_id ?? item.productId ?? item.id ?? '')
