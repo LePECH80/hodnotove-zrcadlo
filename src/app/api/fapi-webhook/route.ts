@@ -58,10 +58,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // FAPI posílá data jako form-urlencoded (ne JSON) — zvládáme obě varianty
-    const contentType = req.headers.get('content-type') || ''
+    // FAPI posílá jen ID notifikaci — stáhneme plná data z FAPI API
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let body: any
+    const contentType = req.headers.get('content-type') || ''
     if (contentType.includes('application/json')) {
       body = await req.json()
     } else {
@@ -69,60 +69,52 @@ export async function POST(req: NextRequest) {
       const params = new URLSearchParams(text)
       body = Object.fromEntries(params.entries())
     }
-    console.log('FAPI webhook payload:', JSON.stringify(body).slice(0, 500))
+    const invoiceId = body.id
+    console.log('FAPI webhook přijat, invoice ID:', invoiceId)
 
-    // --- Parsování FAPI payloadu ---
-    // FAPI posílá data v různých formátech podle verze — zvládáme obě
-    const status = body.status ?? body.order_status ?? body.orderStatus ?? ''
-    const isPaid = ['paid', 'completed', 'zaplaceno', 'dokonceno'].includes(
-      String(status).toLowerCase()
-    )
-
-    if (!isPaid) {
-      // Objednávka ještě není zaplacená — ignorujeme
-      return NextResponse.json({ ok: true, skipped: true, status })
+    if (!invoiceId) {
+      return NextResponse.json({ error: 'Missing invoice ID' }, { status: 400 })
     }
 
-    // --- Filtrování podle produktu ---
-    // Zpracujeme pouze objednávky obsahující produkt Hodnotové zrcadlo (ID: 653924)
-    const ALLOWED_PRODUCT_ID = process.env.FAPI_PRODUCT_ID || '653924'
-    const items: any[] =
-      body.items ?? body.order?.items ?? body.orderItems ?? []
-    const hasProduct = items.some((item) => {
-      const id = String(item.product_id ?? item.productId ?? item.id ?? '')
-      return id === ALLOWED_PRODUCT_ID
+    // --- Stáhni plná data faktury z FAPI API ---
+    const fapiUsername = process.env.FAPI_API_USERNAME
+    const fapiApiKey = process.env.FAPI_API_KEY
+    if (!fapiUsername || !fapiApiKey) {
+      console.error('Chybí FAPI_API_USERNAME nebo FAPI_API_KEY')
+      return NextResponse.json({ error: 'FAPI credentials missing' }, { status: 500 })
+    }
+
+    const credentials = Buffer.from(`${fapiUsername}:${fapiApiKey}`).toString('base64')
+    const fapiRes = await fetch(`https://api.fapi.cz/invoices/${invoiceId}`, {
+      headers: { 'Authorization': `Basic ${credentials}`, 'Accept': 'application/json' }
     })
 
-    if (items.length > 0 && !hasProduct) {
-      console.log(`FAPI webhook: jiný produkt (ne ${ALLOWED_PRODUCT_ID}), přeskakuji`)
+    if (!fapiRes.ok) {
+      console.error('FAPI API chyba:', fapiRes.status)
+      return NextResponse.json({ error: 'FAPI API error' }, { status: 500 })
+    }
+
+    const invoice = await fapiRes.json()
+    console.log('FAPI faktura načtena, paid:', invoice.paid, 'email:', invoice.customer?.email)
+
+    // --- Zkontroluj zda je zaplaceno ---
+    if (!invoice.paid) {
+      return NextResponse.json({ ok: true, skipped: true, reason: 'not_paid' })
+    }
+
+    // --- Zkontroluj zda obsahuje Hodnotové zrcadlo (kód 653924) ---
+    const items: any[] = invoice.items || []
+    const hasHodnotoveZrcadlo = items.some((item: any) => String(item.code) === '653924')
+
+    if (!hasHodnotoveZrcadlo) {
+      console.log('FAPI webhook: objednávka neobsahuje Hodnotové zrcadlo, přeskakuji')
       return NextResponse.json({ ok: true, skipped: true, reason: 'different_product' })
     }
 
-    // Email zákazníka
-    const email: string =
-      body.email ??
-      body.customer?.email ??
-      body.billing?.email ??
-      body.order?.email ??
-      ''
-
-    // Jméno zákazníka
-    const firstName: string =
-      body.firstName ??
-      body.first_name ??
-      body.customer?.firstName ??
-      body.customer?.first_name ??
-      body.billing?.first_name ??
-      ''
-
-    const lastName: string =
-      body.lastName ??
-      body.last_name ??
-      body.customer?.lastName ??
-      body.customer?.last_name ??
-      body.billing?.last_name ??
-      ''
-
+    // --- Zákaznická data ---
+    const email: string = invoice.customer?.email || ''
+    const firstName: string = invoice.customer?.first_name || ''
+    const lastName: string = invoice.customer?.last_name || ''
     const clientName = [firstName, lastName].filter(Boolean).join(' ').trim() || email
 
     if (!email || !email.includes('@')) {
