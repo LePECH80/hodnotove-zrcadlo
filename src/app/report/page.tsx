@@ -57,7 +57,6 @@ interface ReportData {
   nextSteps: string[]
   moreLess?: { more: string[]; less: string[] }
   biggestValueZones?: BiggestValueZone[]
-  unknowns?: string[]
   experiments?: string[]
   strengthVsRisk?: StrengthVsRisk[]
   closingMirror: string
@@ -608,22 +607,6 @@ function ReportPageContent() {
           </section>
         ) : null}
 
-        {/* 16. CO ZATÍM NEVÍME */}
-        {report.unknowns?.length ? (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Co zatím nevíme</h2>
-            <div className="card-pink p-6">
-              <ul className="space-y-3">
-                {report.unknowns.map((u, i) => (
-                  <li key={i} className="text-sm text-primary/80 flex items-start gap-3">
-                    <span className="text-primary/30 flex-shrink-0 mt-0.5 font-bold">?</span>{u}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        ) : null}
-
         {/* 17. PRVNÍ EXPERIMENTY */}
         {report.experiments?.length ? (
           <section>
@@ -680,10 +663,10 @@ function ReportPageContent() {
               ceny a komunikace — přesně to děláme v individuální konzultaci.
             </p>
             <div className="bg-white/15 rounded-2xl p-6 max-w-sm mx-auto">
-              <p className="text-white font-bold mb-1">Rezervuj konzultaci</p>
-              <p className="text-white/70 text-sm mb-3">90 minut · zvýhodněná cena pro klientky Hodnotového zrcadla</p>
+              <p className="text-white font-bold mb-1">Individuální konzultace</p>
+              <p className="text-white/70 text-sm mb-3">60 minut · zvýhodněná cena pro klientky Hodnotového zrcadla</p>
               <p className="text-orange font-semibold text-base">
-                {process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'lenkapechrova.cz'}
+                form.fapi.cz/?id=00965c12-7f50-494b-ba9a-6b812d69313a
               </p>
             </div>
             <p className="text-white/40 text-xs mt-6">© {new Date().getFullYear()} inspiraise</p>
@@ -704,17 +687,17 @@ function ReportPageContent() {
               <div className="text-3xl mb-3">🎯</div>
               <h3 className="text-lg font-bold text-primary mb-2">Individuální konzultace</h3>
               <p className="text-primary/70 text-sm leading-relaxed flex-1 mb-5">
-                90 minut práce jedna na jednu. Vezmeme výsledky tvého reportu a proměníme je
-                v konkrétní nabídku, cenu a první výstup ven. Zvýhodněná cena pro klientky
+                60 minut práce jedna na jednu. Vezmeme výsledky tvého reportu a proměníme je
+                v konkrétní nabídku, cenu a první krok ven. Zvýhodněná cena pro klientky
                 Hodnotového zrcadla.
               </p>
               <a
-                href={process.env.NEXT_PUBLIC_CALENDLY_URL ?? '#'}
+                href="https://form.fapi.cz/?id=00965c12-7f50-494b-ba9a-6b812d69313a"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary text-center block"
               >
-                Rezervovat termín →
+                Koupit konzultaci →
               </a>
             </div>
 
