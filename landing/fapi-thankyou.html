@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Děkuji za objednávku · Inspiraise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Geist', sans-serif;
+      background: #f8f5f3;
+      color: #58113c;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .wrap {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* LOGO */
+    .logo { margin-bottom: 32px; }
+
+    /* HERO KARTA */
+    .hero {
+      background: #58113c;
+      border-radius: 20px;
+      padding: 40px 40px 0;
+      margin-bottom: 20px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero__label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #e4bdd1;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .hero__title {
+      color: #fff;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    .hero__perex {
+      color: rgba(255,255,255,.75);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 32px;
+    }
+    .hero__photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 4px solid rgba(255,255,255,.2);
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* KARTA */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .card__label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #8d175e;
+      margin-bottom: 16px;
+    }
+
+    /* CO DÁL */
+    .next-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .next-item:last-child { margin-bottom: 0; }
+    .next-item__icon {
+      width: 36px;
+      height: 36px;
+      background: #f8f5f3;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .next-item__text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+    .next-item__text p { font-size: 13px; color: rgba(88,17,60,.65); line-height: 1.5; }
+
+    /* KONTAKT */
+    .contact {
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: rgba(88,17,60,.55);
+      line-height: 1.8;
+    }
+    .contact a { color: #8d175e; text-decoration: none; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 11px;
+      color: rgba(88,17,60,.3);
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <svg style="height:28px;width:auto;" viewBox="0 0 680.77 131.57" xmlns="http://www.w3.org/2000/svg"><g fill="#58113c"><rect x="0" y="27.11" width="17.91" height="74.61"/><path d="M35.21,27.11h17.61v12.24c4.48-7.76,12.09-13.73,24.47-13.73,15.07,0,28.95,8.8,28.95,30.14v45.96h-17.61v-40.89c0-10.74-4.33-18.8-16.12-18.8-10.89,0-19.7,7.61-19.7,21.94v37.75h-17.61V27.11Z"/><path d="M118.78,79.19l16.56-3.58c.75,9.55,10.15,13.88,19.4,13.88,7.76,0,13.58-3.28,13.58-8.51,0-5.97-6.57-7.76-16.86-10.3-18.8-4.77-28.95-10.45-28.95-23.88s12.09-21.19,30-21.19c15.52,0,29.7,7.46,31.64,20.74l-16.41,3.58c-1.49-6.86-6.72-10.74-15.37-10.74-7.01,0-12.09,2.83-12.09,7.61,0,5.67,8.36,8.06,21.19,10.89,12.83,2.84,24.92,8.8,24.92,22.53s-13.28,22.98-31.79,22.98c-20.44,0-34.17-9.7-35.81-24.03Z"/><path d="M199.65,27.11h17.61v13.13c4.63-7.76,12.68-14.62,26.71-14.62,18.8,0,35.52,14.92,35.52,38.95s-16.57,38.65-35.52,38.65c-12.98,0-23.13-6.57-26.71-14.48v42.83h-17.61V27.11ZM261.43,64.56c0-13.28-9.1-22.68-21.79-22.68s-22.09,9.55-22.09,22.68,9.4,22.38,22.09,22.38,21.79-9.4,21.79-22.38Z"/><path d="M405.01,80.88c0-16.12,13.73-25.52,37.6-25.52h13.73v-1.49c0-8.95-5.22-14.48-15.82-14.48-8.8,0-14.77,4.03-17.01,11.79l-17.61-4.33c3.88-13.58,17.01-21.49,34.92-21.49,22.38,0,33.28,12.68,33.28,28.35v33.43h8.51v14.33h-14.77c-7.16,0-10.15-2.69-10.15-9.55v-2.98c-5.07,8.66-15.22,14.03-27.01,14.03-16.12,0-25.67-9.55-25.67-22.09ZM456.34,68.94v-1.34h-11.79c-15.07,0-21.64,4.33-21.64,12.09,0,5.82,4.78,9.7,12.09,9.7,12.98,0,21.34-9.85,21.34-20.44Z"/><rect x="495.58" y="26.86" width="17.91" height="74.61"/><path d="M526.92,78.94l16.56-3.58c.75,9.55,10.15,13.88,19.4,13.88,7.76,0,13.58-3.28,13.58-8.51,0-5.97-6.57-7.76-16.86-10.3-18.8-4.77-28.95-10.45-28.95-23.88s12.09-21.19,30-21.19c15.52,0,29.7,7.46,31.64,20.74l-16.41,3.58c-1.49-6.86-6.72-10.74-15.37-10.74-7.01,0-12.09,2.83-12.09,7.61,0,5.67,8.36,8.06,21.19,10.89,12.83,2.84,24.92,8.8,24.92,22.53s-13.28,22.98-31.79,22.98c-20.44,0-34.17-9.7-35.81-24.03Z"/><path d="M604.21,64.61c0-22.24,16.12-39.25,39.25-39.25s37.31,16.27,37.31,38.5c0,2.09-.15,4.33-.45,6.57h-57.9c.9,12.24,10.15,17.91,21.34,17.91,9.7,0,16.27-4.03,19.4-9.55l15.37,4.92c-5.37,11.64-17.16,19.25-35.07,19.25-23.13,0-39.25-15.97-39.25-38.35ZM643.46,40.29c-11.34,0-19.4,6.42-21.04,16.71h41.34c-1.19-10.15-9.1-16.71-20.29-16.71Z"/><rect x="0" y=".25" width="17.91" height="17.91"/><rect x="495.58" width="17.91" height="17.91"/><path d="M381.94,75c3.66-1.93,6.69-4.21,9.11-6.83,2.42-2.55,4.25-5.4,5.49-8.54,1.24-3.14,1.83-6.37,1.76-9.68-.14-2.76-.71-5.42-1.71-7.97-1-2.55-2.4-4.83-4.19-6.83-3.93-4.35-8.94-6.94-15.01-7.77-2.21-.34-4.28-.52-6.21-.52-4.83,0-9.63.79-14.39,2.38-3.8,1.38-7.25,3.14-10.35,5.28-3.31,2.21-6.42,5.04-9.32,8.49-2.62,3.18-4.97,6.8-7.04,10.87,0,0-5.77,11.9-6.63,15.22l-.73,2.07c-1.93,5.66-3.42,11.17-4.45,16.51-1.04,5.35-1.55,10.03-1.55,14.03h16.15c0-3.04.45-6.78,1.35-11.23.9-4.45,2.14-9.02,3.73-13.72,2,.69,3.97,1.31,5.9,1.86,2.18.57,4.36.99,6.54,1.3.05,3.68.69,7.05,1.95,10.09,1.31,3.18,3.21,5.87,5.69,8.08,3.73,3.31,8.08,5.11,13.05,5.38.34.07.9.1,1.66.1,3.17,0,6.42-.55,9.73-1.66,2.62-.9,4.97-1.93,7.04-3.11,2.07-1.17,3.45-2.04,4.14-2.59l-9.63-13.05c-2.14,1.52-4.38,2.66-6.73,3.42-1.66.55-3.14.83-4.45.83-1.52,0-2.9-.48-4.14-1.45-1.39-1.32-2.1-3.37-2.16-6.14,1.07-.17,2.14-.36,3.2-.59,4.42-.9,8.49-2.31,12.22-4.24ZM366.41,63.41c-2.76.62-5.56.93-8.39.93-3.38,0-6.73-.45-10.04-1.35-1.1-.28-2.38-.65-3.83-1.14,1.72-3.52,3.52-6.35,5.38-8.49,3.45-4.21,7.63-7.14,12.53-8.8,3.11-1.04,6.14-1.55,9.11-1.55.34,0,1.66.1,3.93.31,2.14.28,3.87,1.14,5.18,2.59,1.17,1.31,1.76,2.8,1.76,4.45.14,2.55-1.07,5.07-3.62,7.56-2.55,2.48-6.56,4.32-12.01,5.49Z"/><rect x="293.06" y=".25" width="17.91" height="17.91"/><path d="M306.51,101.72c0-4.1.53-8.93,1.59-14.37.73-3.76,1.7-7.64,2.87-11.57V27.11h-17.91v74.61h13.45Z"/></g></svg>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero__label">Hodnotové zrcadlo™</p>
+    <h1 class="hero__title">Děkuji za důvěru ✨</h1>
+    <p class="hero__perex">
+      Právě jsi udělala první krok k tomu, abys se na sebe podívala trochu jinýma očima.
+      Za chvíli ti přijde email s přístupovým odkazem.
+    </p>
+    <img
+      src="https://inspiraise.com/wp-content/uploads/2026/04/LP_profle-pic.png"
+      alt="Lenka Pechrová"
+      class="hero__photo"
+    >
+  </div>
+
+  <!-- CO DÁL -->
+  <div class="card">
+    <p class="card__label">Co se děje dál</p>
+
+    <div class="next-item">
+      <div class="next-item__icon">📧</div>
+      <div class="next-item__text">
+        <strong>Zkontroluj email</strong>
+        <p>Po přijetí platby ti přijde unikátní přístupový odkaz na diagnostiku. Zkontroluj i složku spam.</p>
+      </div>
+    </div>
+
+    <div class="next-item">
+      <div class="next-item__icon">⏱</div>
+      <div class="next-item__text">
+        <strong>Vyhraď si 45–60 minut</strong>
+        <p>Diagnostiku doporučuji dělat v klidu, bez rušení — nejlepší výsledky přichází, když si na ni vyhradíš čas jako na důležitou schůzku.</p>
+      </div>
+    </div>
+
+    <div class="next-item">
+      <div class="next-item__icon">🎙</div>
+      <div class="next-item__text">
+        <strong>Tip: diktování místo psaní</strong>
+        <p>Mluveným slovem to půjde přirozeněji. Zkus aplikaci <a href="https://wisprflow.ai/r?LENKA74" style="color:#8d175e;">Wispr Flow</a> — 30 dní zdarma.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KONTAKT -->
+  <div class="contact">
+    <strong style="color:#58113c;">Lenka Pechrová</strong><br>
+    Business koučka · Inspiraise s.r.o.<br><br>
+    <a href="tel:+420734174345">+420 734 174 345</a> ·
+    <a href="mailto:lenka.pechrova@inspiraise.com">lenka.pechrova@inspiraise.com</a><br>
+    <a href="https://inspiraise.com">inspiraise.com</a>
+  </div>
+
+  <div class="footer">© 2026 Inspiraise s.r.o. · <a href="https://inspiraise.com/gdpr/" style="color:rgba(88,17,60,.4);">Ochrana osobních údajů</a></div>
+
+</div>
+</body>
+</html>

@@ -26,16 +26,18 @@ Klíčové zásady:
 - Každý závěr musí být opřený o konkrétní odpovědi z konverzace.
 - Nikdy nevymýšlej insighty, které z odpovědí nevyplývají.
 - Používej konkrétní formulace z odpovědí klientky.
-- Piš v ženském rodě, osobně, přesně, bez motivační omáčky.
+- Piš v ženském rodě, osobně a přesně.
+- TÓN: Úvod reportu (heroInsight, clientSummary, shortMirror) piš vřele, oceňujícím a povzbudivým tónem — ať klientka po přečtení cítí uznání a chuť na sobě stavět. Analytické sekce (slepá místa, vnitřní napětí, síla × riziko) drž věcné a přesné, bez příkras.
+- VEĎ SILNOU STRÁNKOU: Report vždy otevírá tím nejlepším — nejdřív pojmenuj a oceň, v čem je klientka silná, a rozviň to. Kritičtější vhled (na co si dát pozor, rizika, slepá místa) přichází až po tomto pozitivním základu, nikdy ne jako první dojem.
 - Pokud znáš jméno klientky, skloňuj ho vždy do vokativu (5. pád): Lenka → Lenko, Jana → Jano, Petra → Petro, Markéta → Markéto.
 - Report musí působit jako hluboké osobní zrcadlo, ne jako AI generátor osobnosti.
 
 Odpověz POUZE validním JSON objektem (bez markdown bloků, bez dalšího textu) v tomto přesném formátu:
 
 {
-  "heroInsight": "Jedna silná věta — největší insight z celé diagnostiky. Osobní, přesná, emočně silná.",
-  "clientSummary": "2–3 věty shrnující podstatu její hodnoty. Nech to být přesné a lidské.",
-  "shortMirror": "3–5 vět jako krátké zrcadlo toho, co se ukázalo. Přesné, ne přehnaně motivační.",
+  "heroInsight": "Jedna silná, povzbudivá věta — pojmenuj tu nejcennější silnou stránku, kterou klientka v sobě má. Ať v ní zazní uznání a ocenění toho, co umí. Osobní, vřelá, emočně silná — po přečtení má cítit: ano, tohle jsem já a je to vzácné.",
+  "clientSummary": "2–3 vřelé, oceňující věty shrnující podstatu její hodnoty a v čem je výjimečná. Veď silnou stránkou — pojmenuj, co umí, dřív než cokoliv jiného. Lidské a povzbudivé, ale opřené o to, co reálně zaznělo v rozhovoru.",
+  "shortMirror": "3–5 vět jako vřelé, podporující zrcadlo toho nejlepšího, co se ukázalo. Začni silnou stránkou a rozviň ji — ať klientka cítí ocenění a chuť na sobě stavět. Drž se konkrétních věcí z rozhovoru. (Stíny a rizika řeší až pozdější sekce reportu.)",
   "coreStrengths": [
     {
       "title": "Název silného jádra",
