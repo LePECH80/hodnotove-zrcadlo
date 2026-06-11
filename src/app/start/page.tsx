@@ -43,6 +43,8 @@ function StartContent() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [starting, setStarting] = useState(false)
+  const [resumed, setResumed] = useState(false)
+  const [invalidReason, setInvalidReason] = useState<string | null>(null)
 
   useEffect(() => {
     if (!token) {
@@ -60,13 +62,22 @@ function StartContent() {
         if (data.valid) {
           setSessionId(data.sessionId)
           if (data.email) setEmail(data.email)
+          setResumed(Boolean(data.resumed))
           setStatus('valid')
         } else {
+          setInvalidReason(data.reason ?? null)
           setStatus('invalid')
         }
       })
       .catch(() => setStatus('invalid'))
   }, [token])
+
+  const handleResume = () => {
+    if (!sessionId || !token) return
+    sessionStorage.setItem('sessionId', sessionId)
+    sessionStorage.setItem('token', token)
+    router.push('/chat')
+  }
 
   const handleStart = async () => {
     if (!sessionId || !token || !name.trim() || !email.trim()) return
@@ -97,15 +108,51 @@ function StartContent() {
   }
 
   if (status === 'invalid') {
+    const isCompleted = invalidReason === 'completed'
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-6">
         <div className="card max-w-md w-full p-10 text-center">
-          <div className="text-5xl mb-6">🔒</div>
-          <h1 className="text-2xl font-bold text-primary mb-3">Odkaz není platný</h1>
+          <div className="text-5xl mb-6">{isCompleted ? '✅' : '🔒'}</div>
+          <h1 className="text-2xl font-bold text-primary mb-3">
+            {isCompleted ? 'Diagnostika je dokončená' : 'Odkaz není platný'}
+          </h1>
           <p className="text-primary/70 leading-relaxed">
-            Tento odkaz není platný nebo již byl použit. Každý odkaz slouží pro jedno sezení.
-            Zkontroluj prosím email — odkaz sis mohla nechat zaslat znovu.
+            {isCompleted ? (
+              <>
+                Tuhle diagnostiku už máš hotovou a tvoje Osobní mapa hodnoty ti dorazila e-mailem.
+                Zkontroluj prosím schránku (i spam). Kdyby report nedorazil, napiš mi na{' '}
+                <a
+                  href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}`}
+                  className="text-secondary underline underline-offset-2"
+                >
+                  {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}
+                </a>.
+              </>
+            ) : (
+              <>
+                Tento odkaz není platný. Zkontroluj prosím e-mail — odkaz sis mohla nechat zaslat znovu.
+              </>
+            )}
           </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Vracející se klient s rozdělaným rozhovorem — rovnou nabídneme pokračování
+  if (status === 'valid' && resumed) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-6 py-14">
+        <div className="card max-w-md w-full p-10 text-center">
+          <div className="text-5xl mb-6">👋</div>
+          <h1 className="text-2xl font-bold text-primary mb-3">Vítej zpátky!</h1>
+          <p className="text-primary/70 leading-relaxed mb-8">
+            Tvoje diagnostika je rozpracovaná. Můžeš pokračovat přesně tam, kde jsi posledně přestala —
+            nic se neztratilo.
+          </p>
+          <button onClick={handleResume} className="btn-primary text-lg px-10 py-4">
+            Pokračovat v diagnostice →
+          </button>
         </div>
       </div>
     )

@@ -199,9 +199,17 @@ export async function POST(req: NextRequest) {
     // Získej email a jméno klientky pro odeslání reportu
     const { data: sessionData } = await supabase
       .from('sessions')
-      .select('client_name, client_email')
+      .select('client_name, client_email, token_id')
       .eq('id', sessionId)
       .single()
+
+    // Report je hotový → ukonči přístup (spálí token) a zastav připomínky
+    if (sessionData?.token_id) {
+      await supabase
+        .from('tokens')
+        .update({ used: true })
+        .eq('id', sessionData.token_id)
+    }
 
     if (sessionData?.client_email) {
       const clientName = sessionData.client_name || ''

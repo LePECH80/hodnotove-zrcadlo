@@ -11,10 +11,9 @@ export async function POST(req: NextRequest) {
 
     const supabase = createClient()
 
-    // Dev/testovací bypass — token se neoznačí jako použitý, lze použít opakovaně
+    // Dev/testovací bypass — vždy nové sezení, token se nikdy nespálí
     const devToken = process.env.DEV_TOKEN
     if (devToken && token === devToken) {
-      // Najdi nebo vytvoř dev token v databázi (kvůli FK na sessions)
       let { data: devRow } = await supabase
         .from('tokens')
         .select('id')
@@ -37,12 +36,12 @@ export async function POST(req: NextRequest) {
           .select('id')
           .single()
         if (session) {
-          return NextResponse.json({ valid: true, sessionId: session.id, email: 'test@test.cz' })
+          return NextResponse.json({ valid: true, sessionId: session.id, email: 'test@test.cz', resumed: false })
         }
       }
     }
 
-    // Find token
+    // Najdi token
     const { data: tokenRow, error } = await supabase
       .from('tokens')
       .select('id, used, email')
@@ -53,22 +52,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ valid: false })
     }
 
+    // used = true znamená, že report už byl vygenerován → přístup skončil
     if (tokenRow.used) {
-      return NextResponse.json({ valid: false, reason: 'used' })
+      return NextResponse.json({ valid: false, reason: 'completed' })
     }
 
-    // Mark token as used atomically
-    const { error: updateError } = await supabase
-      .from('tokens')
-      .update({ used: true })
-      .eq('id', tokenRow.id)
-      .eq('used', false) // optimistic lock
+    // --- Přístup je platný. Token se NESPÁLÍ. ---
+    // Pokud už existuje rozdělané sezení, navážeme na něj. Jinak vytvoříme nové.
+    const { data: existing } = await supabase
+      .from('sessions')
+      .select('id, messages')
+      .eq('token_id', tokenRow.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
 
-    if (updateError) {
-      return NextResponse.json({ valid: false, reason: 'race' })
+    if (existing) {
+      const msgCount = Array.isArray(existing.messages) ? existing.messages.length : 0
+      return NextResponse.json({
+        valid: true,
+        sessionId: existing.id,
+        email: tokenRow.email,
+        resumed: msgCount > 0,
+      })
     }
 
-    // Create session
+    // Žádné sezení zatím není — vytvoř nové
     const { data: session, error: sessionError } = await supabase
       .from('sessions')
       .insert({ token_id: tokenRow.id, messages: [], current_phase: 1 })
@@ -79,7 +88,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ valid: false })
     }
 
-    return NextResponse.json({ valid: true, sessionId: session.id, email: tokenRow.email })
+    return NextResponse.json({ valid: true, sessionId: session.id, email: tokenRow.email, resumed: false })
   } catch {
     return NextResponse.json({ valid: false }, { status: 500 })
   }
