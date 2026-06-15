@@ -417,14 +417,14 @@ export default function ChatPage() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={loading || editingIndex !== null}
-              placeholder="Napiš svou odpověď… (Enter = odeslat, Shift+Enter = nový řádek)"
-              rows={1}
-              className="flex-1 bg-peach border border-pink-light rounded-xl px-4 py-3 text-sm text-primary placeholder:text-primary/40 resize-none focus:outline-none focus:border-secondary transition-colors disabled:opacity-50"
-              style={{ maxHeight: '120px' }}
+              placeholder="Napiš svou odpověď… klidně víc vět, čím konkrétněji, tím přesnější výsledek. (Enter = odeslat, Shift+Enter = nový řádek)"
+              rows={4}
+              className="flex-1 bg-peach border border-pink-light rounded-xl px-4 py-3.5 text-base text-primary placeholder:text-primary/40 resize-none focus:outline-none focus:border-secondary transition-colors disabled:opacity-50 leading-relaxed"
+              style={{ minHeight: '112px', maxHeight: '320px' }}
               onInput={e => {
                 const el = e.currentTarget
                 el.style.height = 'auto'
-                el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+                el.style.height = Math.min(Math.max(el.scrollHeight, 112), 320) + 'px'
               }}
             />
             <button
