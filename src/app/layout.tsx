@@ -9,7 +9,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Hodnotové zrcadlo | inspiraise',
-  description: 'AI diagnostika tvých hodnot a silných jader.',
+  description: 'AI diagnostika tvých hodnot, silných stránek a talentů.',
 }
 
 export default function RootLayout({
