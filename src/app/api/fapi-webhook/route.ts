@@ -197,8 +197,8 @@ export async function POST(req: NextRequest) {
         </p>
 
         <p style="margin:0 0 28px;color:#58113c80;font-size:13px;line-height:1.6;font-family:sans-serif;">
-          ⚠️ Odkaz je <strong>jednorázový</strong> a platný pouze pro tebe.
-          Pokud by přestal fungovat, napiš mi na
+          💡 <strong>Nemusíš to stihnout napoprvé.</strong> Přes tento odkaz se můžeš kdykoliv vrátit a pokračovat přesně tam, kde jsi skončil(a) — platí, dokud diagnostiku nedokončíš a nevznikne tvoje mapa hodnoty. Odkaz je určený jen pro tebe.
+          Kdyby cokoliv nefungovalo, napiš mi na
           <a href="mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}" style="color:#8d175e;">${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}</a>.
         </p>
 
