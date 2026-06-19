@@ -14,54 +14,29 @@ interface Strength {
   score: number
 }
 
-interface OfferDirection {
+interface Direction {
   name: string
   forWhom: string
-  inSituation: string
-  whatTheyGet: string
-  whyItFits: string
-  watchOut: string
-}
-
-interface Tension {
-  title: string
-  sideA: string
-  sideB: string
-  meaning: string
-  question: string
-}
-
-interface BiggestValueZone {
-  zone: string
-  evidence: string
+  why: string
 }
 
 interface StrengthVsRisk {
   strength: string
   helpsWhen: string
   risksWhen: string
-  peakValue: string
   watchOut: string
 }
 
 interface ReportData {
   heroInsight: string
   clientSummary: string
-  shortMirror: string
   coreStrengths: Strength[]
   energyMap: { drains: string[]; energizes: string[] }
   blindSpots: { selfStatement: string; truth: string }[]
-  patterns: { name: string; description: string }[]
-  valueZone: { archetype: string; description: string; evidence: string }[]
-  keepDelegate: { keep: string[]; delegate: string[] }
-  offerDirections: OfferDirection[]
-  positioningPhrases: string[]
-  tensions: Tension[]
-  nextSteps: string[]
-  moreLess?: { more: string[]; less: string[] }
-  biggestValueZones?: BiggestValueZone[]
-  experiments?: string[]
   strengthVsRisk?: StrengthVsRisk[]
+  moreLess?: { more: string[]; less: string[] }
+  directions?: Direction[]
+  firstSteps?: string[]
   closingMirror: string
 }
 
@@ -305,12 +280,6 @@ function ReportPageContent() {
           <p className="text-white/80 leading-relaxed">{report.clientSummary}</p>
         </section>
 
-        {/* 2. KRÁTKÉ ZRCADLO */}
-        <section className="card p-7">
-          <h2 className="text-lg font-bold text-primary mb-3">Krátké zrcadlo</h2>
-          <p className="text-primary/80 leading-relaxed">{report.shortMirror}</p>
-        </section>
-
         {/* 3. SILNÉ JÁDRO */}
         <section>
           <h2 className="text-xl font-bold text-primary mb-4">Silné jádro expertízy</h2>
@@ -403,164 +372,36 @@ function ReportPageContent() {
           </section>
         )}
 
-        {/* 6. VZORCE */}
-        {report.patterns?.length > 0 && (
+        {/* SÍLA × RIZIKO */}
+        {report.strengthVsRisk?.length ? (
           <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Opakující se vzorce</h2>
-            <div className="space-y-3">
-              {report.patterns.map((p, i) => (
-                <div key={i} className="report-quote">
-                  <p className="font-bold text-primary mb-1">{p.name}</p>
-                  <p className="text-primary/70 text-sm">{p.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 7. ZÓNA VYSOKÉ HODNOTY */}
-        {report.valueZone?.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Zóna vysoké hodnoty</h2>
-            <div className="space-y-4">
-              {report.valueZone.map((v, i) => (
-                <div key={i} className="card-pink p-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    <h3 className="font-bold text-primary">{v.archetype}</h3>
-                  </div>
-                  <p className="text-primary/80 text-sm leading-relaxed mb-2">{v.description}</p>
-                  {v.evidence && <p className="text-xs text-primary/50 italic">{v.evidence}</p>}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 8. CO DRŽET VS DELEGOVAT */}
-        {(report.keepDelegate?.keep?.length > 0 || report.keepDelegate?.delegate?.length > 0) && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Co držet u sebe vs co delegovat</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="card p-6">
-                <h3 className="font-semibold text-primary mb-3">Drž u sebe</h3>
-                <ul className="space-y-2">
-                  {report.keepDelegate.keep.map((k, i) => (
-                    <li key={i} className="text-sm text-primary/80 flex items-start gap-2">
-                      <span className="text-secondary font-bold flex-shrink-0">✓</span>{k}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="card-pink p-6">
-                <h3 className="font-semibold text-primary mb-3">Deleguj nebo nedělej silou</h3>
-                <ul className="space-y-2">
-                  {report.keepDelegate.delegate.map((d, i) => (
-                    <li key={i} className="text-sm text-primary/80 flex items-start gap-2">
-                      <span className="text-orange flex-shrink-0">→</span>{d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* 9. SMĚRY NABÍDKY */}
-        {report.offerDirections?.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Možné směry nabídky</h2>
-            <div className="space-y-4">
-              {report.offerDirections.map((o, i) => (
+            <h2 className="text-xl font-bold text-primary mb-4">Síla × Riziko</h2>
+            <p className="text-sm text-primary/60 mb-4">Každá silná stránka má svůj stín. Tady vidíš celou realitu.</p>
+            <div className="space-y-5">
+              {report.strengthVsRisk.map((s, i) => (
                 <div key={i} className="card p-6">
-                  <h3 className="font-bold text-primary mb-4">Směr {i + 1}: {o.name}</h3>
-                  <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                  <h3 className="font-bold text-primary mb-4">{s.strength}</h3>
+                  <div className="grid sm:grid-cols-3 gap-3 text-sm">
                     <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Pro koho</p>
-                      <p className="text-primary/80">{o.forWhom}</p>
+                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Kde pomáhá</p>
+                      <p className="text-primary/80">{s.helpsWhen}</p>
                     </div>
-                    <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">V jaké situaci</p>
-                      <p className="text-primary/80">{o.inSituation}</p>
-                    </div>
-                    <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Co by získali</p>
-                      <p className="text-primary/80">{o.whatTheyGet}</p>
-                    </div>
-                    <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Proč to sedí</p>
-                      <p className="text-primary/80">{o.whyItFits}</p>
-                    </div>
-                  </div>
-                  {o.watchOut && (
-                    <p className="text-xs text-orange mt-3 italic">⚠ Pozor na: {o.watchOut}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 10. POSITIONING */}
-        {report.positioningPhrases?.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Pracovní věty positioningu</h2>
-            <div className="space-y-3">
-              {report.positioningPhrases.map((phrase, i) => (
-                <div key={i} className="report-quote">
-                  <p className="text-primary italic">&ldquo;{phrase}&rdquo;</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 11. NAPĚTÍ */}
-        {report.tensions?.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Vnitřní napětí a rozpory</h2>
-            <div className="space-y-4">
-              {report.tensions.map((t, i) => (
-                <div key={i} className="card p-6">
-                  <h3 className="font-bold text-primary mb-4">{t.title}</h3>
-                  <div className="grid sm:grid-cols-2 gap-3 mb-3 text-sm">
                     <div className="card-pink p-3 rounded-xl">
-                      <p className="text-xs font-semibold text-primary/50 mb-1">Na jedné straně říkáš</p>
-                      <p className="text-primary/80 italic">&ldquo;{t.sideA}&rdquo;</p>
+                      <p className="text-xs font-semibold text-primary/50 uppercase tracking-wider mb-1">Kde může škodit</p>
+                      <p className="text-primary/80">{s.risksWhen}</p>
                     </div>
-                    <div className="bg-peach border border-pink-light p-3 rounded-xl">
-                      <p className="text-xs font-semibold text-primary/50 mb-1">V příkladech se ukazuje</p>
-                      <p className="text-primary/80">{t.sideB}</p>
+                    <div className="card-pink p-3 rounded-xl">
+                      <p className="text-xs font-semibold text-orange uppercase tracking-wider mb-1">Pozor na</p>
+                      <p className="text-primary/80">{s.watchOut}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-primary/70 mb-2">{t.meaning}</p>
-                  <p className="text-sm text-secondary italic">→ {t.question}</p>
                 </div>
               ))}
             </div>
           </section>
-        )}
+        ) : null}
 
-        {/* 12. DALŠÍ KROKY */}
-        {report.nextSteps?.length > 0 && (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Doporučené další kroky</h2>
-            <div className="space-y-3">
-              {report.nextSteps.map((step, i) => (
-                <div key={i} className="flex items-start gap-4 card p-5">
-                  <span className="w-7 h-7 rounded-full gradient-primary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5">
-                    {i + 1}
-                  </span>
-                  <p className="text-primary/80 text-sm leading-relaxed">{step}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 13. CO DĚLAT VÍCE / MÉNĚ */}
+        {/* CO DĚLAT VÍCE / MÉNĚ */}
         {(report.moreLess?.more?.length ?? 0) > 0 || (report.moreLess?.less?.length ?? 0) > 0 ? (
           <section>
             <h2 className="text-xl font-bold text-primary mb-4">Co dělat více a méně</h2>
@@ -593,73 +434,33 @@ function ReportPageContent() {
           </section>
         ) : null}
 
-        {/* 14. KDE VZNIKÁ NEJVĚTŠÍ HODNOTA */}
-        {report.biggestValueZones?.length ? (
+        {/* SMĚRY NABÍDKY */}
+        {report.directions?.length ? (
           <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Kde vzniká tvoje největší hodnota</h2>
-            <div className="space-y-4">
-              {report.biggestValueZones.map((z, i) => (
-                <div key={i} className="card p-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    <h3 className="font-bold text-primary">{z.zone}</h3>
-                  </div>
-                  {z.evidence && (
-                    <p className="text-xs text-primary/50 italic ml-10">{z.evidence}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {/* 15. SÍLA × RIZIKO */}
-        {report.strengthVsRisk?.length ? (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-4">Síla × Riziko</h2>
-            <p className="text-sm text-primary/60 mb-4">Každá silná stránka má svůj stín. Tato sekce ti ukazuje celou realitu.</p>
-            <div className="space-y-5">
-              {report.strengthVsRisk.map((s, i) => (
-                <div key={i} className="card p-6">
-                  <h3 className="font-bold text-primary mb-4">{s.strength}</h3>
-                  <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                    <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Kde pomáhá</p>
-                      <p className="text-primary/80">{s.helpsWhen}</p>
-                    </div>
-                    <div className="card-pink p-3 rounded-xl">
-                      <p className="text-xs font-semibold text-primary/50 uppercase tracking-wider mb-1">Kde může škodit</p>
-                      <p className="text-primary/80">{s.risksWhen}</p>
-                    </div>
-                    <div className="bg-peach rounded-xl p-3">
-                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Kdy vytváří největší hodnotu</p>
-                      <p className="text-primary/80">{s.peakValue}</p>
-                    </div>
-                    <div className="card-pink p-3 rounded-xl">
-                      <p className="text-xs font-semibold text-orange uppercase tracking-wider mb-1">Pozor na</p>
-                      <p className="text-primary/80">{s.watchOut}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {/* 17. PRVNÍ EXPERIMENTY */}
-        {report.experiments?.length ? (
-          <section>
-            <h2 className="text-xl font-bold text-primary mb-2">První experimenty</h2>
-            <p className="text-sm text-primary/60 mb-4">Ne doporučení — experimenty. Malé kroky, které ověří, co funguje.</p>
+            <h2 className="text-xl font-bold text-primary mb-4">Možné směry, kam s tím dál</h2>
             <div className="space-y-3">
-              {report.experiments.map((exp, i) => (
+              {report.directions.map((d, i) => (
+                <div key={i} className="card p-6">
+                  <h3 className="font-bold text-primary mb-1">Směr {i + 1}: {d.name}</h3>
+                  <p className="text-primary/70 text-sm mb-2">{d.forWhom}</p>
+                  <p className="text-secondary text-sm italic">{d.why}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* PRVNÍ KROKY */}
+        {report.firstSteps?.length ? (
+          <section>
+            <h2 className="text-xl font-bold text-primary mb-4">První kroky</h2>
+            <div className="space-y-3">
+              {report.firstSteps.map((step, i) => (
                 <div key={i} className="flex items-start gap-4 card p-5">
-                  <span className="w-7 h-7 rounded-full border-2 border-secondary flex-shrink-0 flex items-center justify-center text-secondary text-xs font-bold mt-0.5">
+                  <span className="w-7 h-7 rounded-full gradient-primary flex-shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5">
                     {i + 1}
                   </span>
-                  <p className="text-primary/80 text-sm leading-relaxed">{exp}</p>
+                  <p className="text-primary/80 text-sm leading-relaxed">{step}</p>
                 </div>
               ))}
             </div>
@@ -701,9 +502,9 @@ function ReportPageContent() {
             <img src="/logo.svg" alt="inspiraise" className="h-7 mx-auto mb-5" />
             <h2 className="text-2xl font-bold text-primary mb-3">Chceš s tím pracovat dál?</h2>
             <p className="text-primary/75 mb-5 max-w-lg mx-auto leading-relaxed">
-              Teď víš, kde je tvoje hodnota. Dalším krokem je přetavit ji do nabídky,
-              ceny a komunikace. To spolu zvládneme v individuální konzultaci
-              (60 minut, zvýhodněná cena pro klientky Hodnotového zrcadla).
+              Teď máš mapu a v ní možné směry, kam to vzít dál. Na konzultaci spolu
+              vybereme jeden z nich a uděláme z něj konkrétní nabídku, cenu a první krok ven.
+              60 minut jedna na jednu, zvýhodněná cena pro klientky Hodnotového zrcadla.
             </p>
             <p className="text-primary font-bold mb-3">Domluvit konzultaci, naskenuj nebo otevři odkaz:</p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '24px' }}>
@@ -727,9 +528,11 @@ function ReportPageContent() {
         {/* UPSELL — webová verze (skryta v PDF) */}
         <section className="no-print pt-4 border-t-2 border-pink-light">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-primary mb-2">Chceš s tím pracovat dál?</h2>
-            <p className="text-primary/60 text-sm max-w-md mx-auto">
-              Toto je mapa. Teď ji potřebuješ přetavit do konkrétní nabídky, ceny a komunikace.
+            <h2 className="text-2xl font-bold text-primary mb-2">Tvoje mapa je hotová. Co teď?</h2>
+            <p className="text-primary/65 text-sm max-w-lg mx-auto leading-relaxed">
+              V reportu jsi dostala možné směry, kam svoji hodnotu vzít dál. Konzultace je přesně
+              o tom: vybereme spolu jeden směr a přetavíme ho do konkrétní nabídky, ceny a prvního
+              kroku ven. Není to přídavek, je to logické pokračování tvojí mapy.
             </p>
           </div>
 
@@ -738,9 +541,9 @@ function ReportPageContent() {
               <div className="text-3xl mb-3">🎯</div>
               <h3 className="text-lg font-bold text-primary mb-2">Individuální konzultace</h3>
               <p className="text-primary/70 text-sm leading-relaxed flex-1 mb-5">
-                60 minut práce jedna na jednu. Vezmeme výsledky tvého reportu a proměníme je
-                v konkrétní nabídku, cenu a první krok ven. Zvýhodněná cena pro klientky
-                Hodnotového zrcadla.
+                60 minut jedna na jednu. Vezmeme tvoje možné směry z reportu, vybereme spolu ten
+                jeden s největším smyslem a uděláme z něj reálnou nabídku, cenu a první krok.
+                Zvýhodněná cena pro klientky Hodnotového zrcadla.
               </p>
               <a
                 href="https://form.fapi.cz/?id=00965c12-7f50-494b-ba9a-6b812d69313a"

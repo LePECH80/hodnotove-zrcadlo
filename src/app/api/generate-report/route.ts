@@ -39,107 +39,57 @@ Klíčové zásady:
 - Pokud znáš jméno klientky, skloňuj ho vždy do vokativu (5. pád): Lenka → Lenko, Jana → Jano, Petra → Petro, Markéta → Markéto.
 - Report musí působit jako hluboké osobní zrcadlo, ne jako AI generátor osobnosti.
 
+KONCENTROVANÝ REPORT, ŽÁDNÉ OPAKOVÁNÍ (POVINNÉ):
+Report má být krátký a hutný (cca polovina dřívější délky). Každou silnou stránku, vzorec a oblast hodnoty pojmenuj a popiš POUZE JEDNOU, a to v sekci coreStrengths. NIKDY tutéž věc nepřejmenovávej jinými slovy (ne archetyp + zóna + vzorec + síla, když je to pořád totéž). Ostatní sekce na silné stránky jen krátce navazují JINÝM úhlem (energie, riziko, směr nabídky) a NESMÍ znovu vypisovat tytéž příběhy ani je znovu popisovat. Když nemáš nový úhel, sekci klidně zkrať.
+
 Odpověz POUZE validním JSON objektem (bez markdown bloků, bez dalšího textu) v tomto přesném formátu:
 
 {
-  "heroInsight": "JEDNA věta do citace na začátku reportu (zobrazí se s oranžovým pruhem). Pojmenuj v ní konkrétní silnou stránku / zkušenost / hodnotu, kterou klientka může předat druhým a na které může stavět — její zónu génia. Ať na první pohled vidí, kdo je a v čem je dobrá, a řekne si: jo, tohle jsem přesně já. Konkrétní, věcná, bez vaty a bez prázdných superlativů. Ukaž sílu a naznač, k čemu je dobrá — ne lichotka, ale přesné zrcadlo.",
-  "clientSummary": "2–3 věcné věty, které rozvíjejí hlavní silnou stránku z citace — co konkrétně umí a jak se to projevuje. Opřené o to, co reálně zaznělo v rozhovoru. Oceňující, ale střízlivé — žádné nadsazování.",
-  "shortMirror": "3–5 vět jako přesné zrcadlo toho, co se v rozhovoru opakovaně ukázalo. Konkrétní situace a vzorce, ne obecné chválení. Začni silnou stránkou, drž se faktů z rozhovoru. (Stíny a rizika řeší až pozdější sekce reportu.)",
+  "heroInsight": "JEDNA věta do citace na začátku (oranžový pruh). Pojmenuj konkrétní silnou stránku / zónu génia, na které klientka může stavět. Ať si řekne: jo, tohle jsem přesně já. Konkrétní, věcná, bez vaty a prázdných superlativů.",
+  "clientSummary": "2–3 věcné věty rozvíjející hlavní silnou stránku z citace. Opřené o rozhovor, oceňující ale střízlivé.",
   "coreStrengths": [
     {
-      "title": "Název silného jádra",
-      "description": "Co to znamená v praxi — 2–3 věty.",
-      "evidence": ["konkrétní situace nebo věta z rozhovoru", "další důkaz"],
-      "whyItMatters": "Proč je to hodnota pro druhé — 1 věta.",
+      "title": "Název silné stránky",
+      "description": "Co to znamená v praxi, 2 věty. Tady je JEDINÉ místo, kde silnou stránku popisuješ.",
+      "evidence": ["1 konkrétní situace z rozhovoru", "max 2 důkazy"],
+      "whyItMatters": "Proč je to hodnota pro druhé, 1 věta.",
       "score": 9
     }
   ],
   "energyMap": {
-    "drains": ["Co ji vysává 1 — konkrétní, ne obecné", "Co ji vysává 2", "Co ji vysává 3"],
-    "energizes": ["Kde ožívá 1 — konkrétní situace nebo typ práce", "Kde ožívá 2", "Kde ožívá 3"]
+    "energizes": ["Kde ožívá 1", "Kde ožívá 2", "Kde ožívá 3"],
+    "drains": ["Co ji vysává 1", "Co ji vysává 2", "Co ji vysává 3"]
   },
   "blindSpots": [
     {
-      "selfStatement": "Co o sobě říká — její konkrétní věta nebo typ věty",
-      "truth": "Co je pravda — přesnější přerámování"
+      "selfStatement": "Co o sobě říká, její konkrétní věta",
+      "truth": "Přesnější přerámování"
     }
-  ],
-  "patterns": [
-    {
-      "name": "Název vzorce — např. Chaos → jasný směr",
-      "description": "Krátké vysvětlení vzorce — 1–2 věty."
-    }
-  ],
-  "valueZone": [
-    {
-      "archetype": "Název archetypu — např. Diagnostik, Překladatel, Aktivátor",
-      "description": "Co to v praxi znamená pro ni — 2 věty.",
-      "evidence": "O co se to opírá z rozhovoru."
-    }
-  ],
-  "keepDelegate": {
-    "keep": ["Co držet u sebe 1", "Co držet u sebe 2", "Co držet u sebe 3"],
-    "delegate": ["Co delegovat 1", "Co delegovat 2", "Co delegovat 3"]
-  },
-  "offerDirections": [
-    {
-      "name": "Název směru nabídky",
-      "forWhom": "Pro koho — typ klienta",
-      "inSituation": "V jaké situaci tě potřebují",
-      "whatTheyGet": "Co by získali — konkrétní výsledek",
-      "whyItFits": "Proč to sedí na její hodnotu",
-      "watchOut": "Na co si dát pozor"
-    }
-  ],
-  "positioningPhrases": [
-    "Pomáhám [komu], když [situace], aby [výsledek].",
-    "Pracovní věta 2 — jiný tón nebo konkrétnost.",
-    "Pracovní věta 3."
-  ],
-  "tensions": [
-    {
-      "title": "Napětí 1: [A] vs [B]",
-      "sideA": "Co na jedné straně říká",
-      "sideB": "Co se v příkladech opakovaně ukazuje",
-      "meaning": "Co to může znamenat — opatrná interpretace.",
-      "question": "Otázka k dalšímu promyšlení."
-    }
-  ],
-  "nextSteps": ["Konkrétní další krok 1", "Konkrétní další krok 2", "Konkrétní další krok 3"],
-  "moreLess": {
-    "more": [
-      "Situace, role nebo typ práce, kde se silné stránky opakovaně projevovaly — co dělat více 1",
-      "Co dělat více 2",
-      "Co dělat více 3"
-    ],
-    "less": [
-      "Činnost nebo situace, která opakovaně vysávala nebo brzdila — co dělat méně 1",
-      "Co dělat méně 2",
-      "Co dělat méně 3"
-    ]
-  },
-  "biggestValueZones": [
-    {
-      "zone": "Název oblasti — max. 3 oblasti celkem",
-      "evidence": "Konkrétní důkaz z rozhovoru, na kterém tato oblast stojí."
-    }
-  ],
-  "experiments": [
-    "Malý experiment 1 — konkrétní, ověřitelný v praxi, ne rada ani doporučení",
-    "Experiment 2",
-    "Experiment 3"
   ],
   "strengthVsRisk": [
     {
-      "strength": "Název hlavního vzorce nebo silné stránky",
-      "helpsWhen": "V jakých situacích tato síla vytváří hodnotu.",
-      "risksWhen": "Kdy může být přehnaná nebo kontraproduktivní.",
-      "peakValue": "Konkrétní podmínky nebo kontext, kde vytváří největší hodnotu.",
-      "watchOut": "Situace, kde tato síla může spíše ubírat než přidávat."
+      "strength": "Odkaz na silnou stránku JMÉNEM (neopisuj ji znovu)",
+      "helpsWhen": "Kdy tato síla vytváří hodnotu, 1 věta.",
+      "risksWhen": "Kdy může být přehnaná nebo kontraproduktivní, 1 věta.",
+      "watchOut": "Na co si dát pozor, 1 věta."
     }
   ],
-  "closingMirror": "Závěrečné zrcadlo — 3–5 silných vět, které uzavírají celou diagnostiku a dávají pocit: Jo. Tohle dává smysl."
-}`
+  "moreLess": {
+    "more": ["Co dělat více 1", "Co dělat více 2", "Co dělat více 3"],
+    "less": ["Co dělat méně 1", "Co dělat méně 2", "Co dělat méně 3"]
+  },
+  "directions": [
+    {
+      "name": "Název možného směru nabídky",
+      "forWhom": "Pro koho a v jaké situaci, krátce",
+      "why": "Proč to sedí na její hodnotu, 1 věta."
+    }
+  ],
+  "firstSteps": ["Konkrétní první krok 1", "První krok 2", "První krok 3"],
+  "closingMirror": "Závěrečné zrcadlo, 3–5 silných vět, které uzavírají diagnostiku a dávají pocit: Jo, tohle dává smysl."
+}
+
+POČTY (drž se kvůli stručnosti): coreStrengths max 3, blindSpots max 2, strengthVsRisk max 2, directions max 3, firstSteps max 3.`
 
 interface Message {
   role: 'user' | 'assistant'
@@ -163,7 +113,7 @@ export async function POST(req: NextRequest) {
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 5000,
+      max_tokens: 4000,
       system: [{ type: 'text', text: REPORT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
       messages: [
         {
@@ -227,8 +177,7 @@ export async function POST(req: NextRequest) {
       const reportUrl = `${appUrl}/report?session=${sessionId}`
 
       const strengths = (reportData.coreStrengths || []).slice(0, 3)
-      const valueZone = (reportData.valueZone || []).slice(0, 2)
-      const nextSteps = (reportData.nextSteps || []).slice(0, 3)
+      const firstSteps = (reportData.firstSteps || []).slice(0, 3)
 
       await resend.emails.send({
         from: 'Lenka z Inspiraise <diagnostika@inspiraise.com>',
@@ -272,20 +221,11 @@ export async function POST(req: NextRequest) {
           <p style="margin:0;color:#58113c80;font-size:13px;font-style:italic;">${s.whyItMatters}</p>
         </div>`).join('')}` : ''}
 
-        <!-- Zóna hodnoty -->
-        ${valueZone.length > 0 ? `
-        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Tvoje zóna hodnoty</h2>
-        ${valueZone.map((v: {archetype: string; description: string}) => `
-        <div style="margin:0 0 12px;padding:14px 20px;border:1.5px solid #e4bdd1;border-radius:10px;">
-          <p style="margin:0 0 4px;color:#8d175e;font-size:14px;font-weight:700;font-family:sans-serif;">${v.archetype}</p>
-          <p style="margin:0;color:#58113c;font-size:14px;line-height:1.6;">${v.description}</p>
-        </div>`).join('')}` : ''}
-
-        <!-- Další kroky -->
-        ${nextSteps.length > 0 ? `
-        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Další kroky</h2>
+        <!-- První kroky -->
+        ${firstSteps.length > 0 ? `
+        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">První kroky</h2>
         <ol style="margin:0 0 28px;padding-left:20px;color:#58113c;font-size:15px;line-height:1.8;">
-          ${nextSteps.map((s: string) => `<li style="margin-bottom:8px;">${s}</li>`).join('')}
+          ${firstSteps.map((s: string) => `<li style="margin-bottom:8px;">${s}</li>`).join('')}
         </ol>` : ''}
 
         <!-- Závěr -->
