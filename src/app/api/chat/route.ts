@@ -55,14 +55,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Session not found' }, { status: 404 })
     }
 
-    // Call Anthropic — send full conversation history
+    // Sestav zprávy a zapni prompt caching (šetří kredity — opakovaný prompt + historie se čtou levně)
+    const apiMessages: Anthropic.MessageParam[] = messages.length > 0
+      ? messages.map(m => ({ role: m.role, content: m.content }))
+      : [{ role: 'user', content: 'Začínám.' }]
+
+    // Cache breakpoint na poslední zprávě → celá předchozí historie se příště čte z cache
+    const lastIdx = apiMessages.length - 1
+    const lastContent = apiMessages[lastIdx].content
+    if (typeof lastContent === 'string') {
+      apiMessages[lastIdx] = {
+        role: apiMessages[lastIdx].role,
+        content: [{ type: 'text', text: lastContent, cache_control: { type: 'ephemeral' } }],
+      }
+    }
+
+    // Call Anthropic — systémový prompt cachovaný (posílá se každou zprávu, ale čte se levně)
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 1000,
-      system: SYSTEM_PROMPT,
-      messages: messages.length > 0
-        ? messages.map(m => ({ role: m.role, content: m.content }))
-        : [{ role: 'user', content: 'Začínám.' }],
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+      messages: apiMessages,
     })
 
     const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
