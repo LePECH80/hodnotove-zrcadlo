@@ -148,14 +148,14 @@ function ReportPageContent() {
 
   useEffect(() => {
     // Načti uložené myšlenky
-    const saved = sessionStorage.getItem('savedThoughts')
+    const saved = localStorage.getItem('savedThoughts') ?? sessionStorage.getItem('savedThoughts')
     if (saved) {
       try { setAhaThoughts(JSON.parse(saved)) } catch { /* ignore */ }
     }
 
-    // sessionId z URL parametru (z emailu) nebo ze sessionStorage
+    // sessionId z URL parametru (z emailu) nebo z úložiště
     const urlSessionId = searchParams.get('session')
-    const sessionId = urlSessionId || sessionStorage.getItem('sessionId')
+    const sessionId = urlSessionId || localStorage.getItem('sessionId') || sessionStorage.getItem('sessionId')
     if (!sessionId) {
       setError(true)
       setLoading(false)

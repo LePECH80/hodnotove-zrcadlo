@@ -74,8 +74,8 @@ function StartContent() {
 
   const handleResume = () => {
     if (!sessionId || !token) return
-    sessionStorage.setItem('sessionId', sessionId)
-    sessionStorage.setItem('token', token)
+    localStorage.setItem('sessionId', sessionId)
+    localStorage.setItem('token', token)
     router.push('/chat')
   }
 
@@ -93,8 +93,8 @@ function StartContent() {
       // non-blocking — pokračujeme i bez uložení
     }
 
-    sessionStorage.setItem('sessionId', sessionId)
-    sessionStorage.setItem('token', token)
+    localStorage.setItem('sessionId', sessionId)
+    localStorage.setItem('token', token)
     router.push('/chat')
   }
 

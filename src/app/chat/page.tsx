@@ -39,9 +39,9 @@ export default function ChatPage() {
   // Uložené myšlenky
   const [savedThoughts, setSavedThoughts] = useState<SavedThought[]>([])
 
-  // Načti uložené myšlenky ze sessionStorage
+  // Načti uložené myšlenky
   useEffect(() => {
-    const saved = sessionStorage.getItem('savedThoughts')
+    const saved = localStorage.getItem('savedThoughts') ?? sessionStorage.getItem('savedThoughts')
     if (saved) {
       try { setSavedThoughts(JSON.parse(saved)) } catch { /* ignore */ }
     }
@@ -54,27 +54,52 @@ export default function ChatPage() {
     }
   }, [loading, complete, messages.length])
 
-  // Načti sezení
+  // Načti sezení — robustně. Přežije obnovení stránky i zavření prohlížeče.
   useEffect(() => {
-    const id = sessionStorage.getItem('sessionId')
-    if (!id) {
+    const loadSession = (id: string) => {
+      setSessionId(id)
+      fetch(`/api/load-session?sessionId=${id}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.messages?.length > 0) {
+            setMessages(data.messages)
+            setPhase(data.currentPhase ?? 1)
+            if (data.complete) setComplete(true)
+          } else {
+            sendMessage('', id, [])
+          }
+        })
+        .catch(() => { sendMessage('', id, []) })
+    }
+
+    // 1) Máme uložené sezení (localStorage přežije i zavření prohlížeče)
+    const storedId = localStorage.getItem('sessionId')
+    if (storedId) {
+      loadSession(storedId)
+      return
+    }
+
+    // 2) Sezení chybí, ale máme token → obnovíme přístup a navážeme
+    const token = localStorage.getItem('token')
+    if (!token) {
       setInitError(true)
       return
     }
-    setSessionId(id)
-
-    fetch(`/api/load-session?sessionId=${id}`)
+    fetch('/api/verify-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
       .then(r => r.json())
       .then(data => {
-        if (data.messages?.length > 0) {
-          setMessages(data.messages)
-          setPhase(data.currentPhase ?? 1)
-          if (data.complete) setComplete(true)
+        if (data.valid && data.sessionId) {
+          localStorage.setItem('sessionId', data.sessionId)
+          loadSession(data.sessionId)
         } else {
-          sendMessage('', id, [])
+          setInitError(true)
         }
       })
-      .catch(() => { sendMessage('', id, []) })
+      .catch(() => setInitError(true))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Scroll na konec
@@ -174,7 +199,7 @@ export default function ChatPage() {
       ? savedThoughts.filter(t => t.messageIndex !== index)
       : [...savedThoughts, { messageIndex: index, content: msg.content, role: msg.role }]
     setSavedThoughts(updated)
-    sessionStorage.setItem('savedThoughts', JSON.stringify(updated))
+    localStorage.setItem('savedThoughts', JSON.stringify(updated))
   }
 
   const isSaved = (index: number) => savedThoughts.some(t => t.messageIndex === index)
@@ -183,14 +208,16 @@ export default function ChatPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-6">
         <div className="card max-w-md w-full p-10 text-center">
-          <div className="text-5xl mb-6">⚠️</div>
-          <h1 className="text-xl font-bold text-primary mb-3">Sezení nenalezeno</h1>
-          <p className="text-primary/70 mb-6">
-            Začni prosím od odkazu v emailu, abychom ověřily tvůj přístup.
+          <div className="text-5xl mb-6">🔗</div>
+          <h1 className="text-xl font-bold text-primary mb-3">Otevři prosím odkaz z e-mailu</h1>
+          <p className="text-primary/70 mb-6 leading-relaxed">
+            Tvůj rozhovor se nic neztratil — jen ho tahle stránka neumí načíst bez tvého odkazu.
+            Klikni prosím na <strong>odkaz v e-mailu</strong> (předmět „Tvůj přístup…") a budeš pokračovat přesně tam, kde jsi přestal(a).
           </p>
-          <button onClick={() => router.push('/start')} className="btn-primary">
-            Zpět na začátek
-          </button>
+          <p className="text-primary/50 text-sm">
+            Kdyby cokoliv, napiš na{' '}
+            <a href="mailto:lenka@inspiraise.com" className="text-secondary underline underline-offset-2">lenka@inspiraise.com</a>.
+          </p>
         </div>
       </div>
     )
