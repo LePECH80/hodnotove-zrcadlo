@@ -39,6 +39,53 @@ export default function ChatPage() {
   // Uložené myšlenky
   const [savedThoughts, setSavedThoughts] = useState<SavedThought[]>([])
 
+  // Diktování (Web Speech API)
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null)
+  const baseTextRef = useRef('')
+  const finalTextRef = useRef('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+      setSpeechSupported(!!SR)
+    }
+  }, [])
+
+  const toggleDictation = () => {
+    if (isListening) {
+      recognitionRef.current?.stop()
+      return
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SR) return
+    const rec = new SR()
+    rec.lang = 'cs-CZ'
+    rec.continuous = true
+    rec.interimResults = true
+    baseTextRef.current = input ? input + ' ' : ''
+    finalTextRef.current = ''
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      let interim = ''
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript
+        if (e.results[i].isFinal) finalTextRef.current += t
+        else interim += t
+      }
+      setInput((baseTextRef.current + finalTextRef.current + interim).replace(/\s+/g, ' ').trimStart())
+    }
+    rec.onend = () => setIsListening(false)
+    rec.onerror = () => setIsListening(false)
+    recognitionRef.current = rec
+    rec.start()
+    setIsListening(true)
+  }
+
   // Načti uložené myšlenky
   useEffect(() => {
     const saved = localStorage.getItem('savedThoughts') ?? sessionStorage.getItem('savedThoughts')
@@ -155,6 +202,7 @@ export default function ChatPage() {
 
   const handleSend = () => {
     if (!input.trim() || loading || complete) return
+    if (isListening) recognitionRef.current?.stop()
     sendMessage(input.trim())
   }
 
@@ -332,8 +380,8 @@ export default function ChatPage() {
             // AI zpráva
             return (
               <div key={i} className="flex justify-start group">
-                <div className="w-7 h-7 rounded-full gradient-primary flex-shrink-0 mr-2 mt-1 flex items-center justify-center">
-                  <img src="/submark.svg" alt="inspiraise" className="w-3.5 h-3.5 brightness-0 invert" />
+                <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 mr-2 mt-1 border border-pink-light">
+                  <img src="/lenka.png" alt="Lenka" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="bubble-ai max-w-[82%] px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-primary">
@@ -356,8 +404,8 @@ export default function ChatPage() {
           {/* Načítání */}
           {loading && (
             <div className="flex justify-start">
-              <div className="w-7 h-7 rounded-full gradient-primary flex-shrink-0 mr-2 mt-1 flex items-center justify-center text-white text-xs font-bold">
-                A
+              <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 mr-2 mt-1 border border-pink-light">
+                <img src="/lenka.png" alt="Lenka" className="w-full h-full object-cover" />
               </div>
               <div className="bubble-ai px-4 py-3">
                 <span className="flex gap-1 items-center h-5">
@@ -454,6 +502,21 @@ export default function ChatPage() {
                 el.style.height = Math.min(Math.max(el.scrollHeight, 112), 320) + 'px'
               }}
             />
+            {speechSupported && (
+              <button
+                onClick={toggleDictation}
+                disabled={loading || editingIndex !== null}
+                title={isListening ? 'Zastavit diktování' : 'Diktovat hlasem'}
+                aria-label={isListening ? 'Zastavit diktování' : 'Diktovat hlasem'}
+                className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-colors disabled:opacity-40 ${
+                  isListening
+                    ? 'bg-secondary text-white animate-pulse'
+                    : 'bg-peach border border-pink-light text-secondary hover:border-secondary'
+                }`}
+              >
+                {isListening ? '⏺' : '🎙'}
+              </button>
+            )}
             <button
               onClick={handleSend}
               disabled={loading || !input.trim() || editingIndex !== null}
@@ -462,6 +525,11 @@ export default function ChatPage() {
               Odeslat
             </button>
           </div>
+          {isListening && (
+            <p className="max-w-2xl mx-auto text-xs text-secondary mt-2 pl-1">
+              🔴 Poslouchám… mluv klidně celé věty. Až domluvíš, klikni na ⏺ a uprav, co je potřeba.
+            </p>
+          )}
         </footer>
       )}
     </div>
