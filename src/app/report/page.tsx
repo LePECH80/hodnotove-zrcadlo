@@ -530,9 +530,9 @@ function ReportPageContent() {
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-primary mb-2">Tvoje mapa je hotová. Co teď?</h2>
             <p className="text-primary/65 text-sm max-w-lg mx-auto leading-relaxed">
-              V reportu jsi dostala možné směry, kam svoji hodnotu vzít dál. Konzultace je přesně
-              o tom: vybereme spolu jeden směr a přetavíme ho do konkrétní nabídky, ceny a prvního
-              kroku ven. Není to přídavek, je to logické pokračování tvojí mapy.
+              Teď víš, v čem je tvoje hodnota a kde vzniká. To je velký kus cesty. Jenže vidět
+              svoji hodnotu a umět z ní žít jsou dvě různé věci, a ta druhá bývá těžší. Přesně
+              v tomhle přechodu ti umím pomoct, ať nezůstaneš jen u hezké mapy v šuplíku.
             </p>
           </div>
 
