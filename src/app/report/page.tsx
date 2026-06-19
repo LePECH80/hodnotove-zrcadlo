@@ -142,9 +142,43 @@ function ReportPageContent() {
   const [report, setReport] = useState<ReportData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [noAccess, setNoAccess] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
   const [waitlistEmail, setWaitlistEmail] = useState('')
   const [waitlistSent, setWaitlistSent] = useState(false)
   const [ahaThoughts, setAhaThoughts] = useState<SavedThought[]>([])
+
+  // Načti hotový report, nebo ho vygeneruj — s opakováním (generování může na Hobby občas selhat)
+  const loadOrGenerate = async (sid: string, maxAttempts = 3) => {
+    setLoading(true)
+    setError(false)
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const ls = await fetch(`/api/load-session?sessionId=${sid}`).then(r => r.json())
+        if (ls.report) {
+          setReport(typeof ls.report === 'string' ? JSON.parse(ls.report) : ls.report)
+          setLoading(false)
+          return
+        }
+        const res = await fetch('/api/generate-report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: sid, messages: ls.messages ?? [] }),
+        })
+        const d = await res.json()
+        if (res.ok && d.report) {
+          setReport(d.report)
+          setLoading(false)
+          return
+        }
+      } catch {
+        /* síťová chyba — zkusíme znovu */
+      }
+      if (attempt < maxAttempts) await new Promise(r => setTimeout(r, 1500))
+    }
+    setError(true)
+    setLoading(false)
+  }
 
   useEffect(() => {
     // Načti uložené myšlenky
@@ -155,37 +189,15 @@ function ReportPageContent() {
 
     // sessionId z URL parametru (z emailu) nebo z úložiště
     const urlSessionId = searchParams.get('session')
-    const sessionId = urlSessionId || localStorage.getItem('sessionId') || sessionStorage.getItem('sessionId')
-    if (!sessionId) {
-      setError(true)
+    const sid = urlSessionId || localStorage.getItem('sessionId') || sessionStorage.getItem('sessionId')
+    if (!sid) {
+      setNoAccess(true)
       setLoading(false)
       return
     }
-
-    fetch(`/api/load-session?sessionId=${sessionId}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.report) {
-          setReport(JSON.parse(data.report))
-          setLoading(false)
-        } else {
-          return fetch('/api/generate-report', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sessionId, messages: data.messages ?? [] }),
-          })
-            .then(r => r.json())
-            .then(d => {
-              setReport(d.report)
-              setLoading(false)
-            })
-        }
-      })
-      .catch(() => {
-        setError(true)
-        setLoading(false)
-      })
-  }, [])
+    setSessionId(sid)
+    loadOrGenerate(sid)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleWaitlist = async () => {
     if (!waitlistEmail.trim()) return
@@ -210,8 +222,26 @@ function ReportPageContent() {
             a skládám z nich tvou Osobní mapu<AnimatedDots />
           </p>
           <p className="text-primary/35 text-xs mt-3">
-            Může to trvat až minutu — výsledek stojí za to.
+            Může to trvat 1 až 2 minuty. Nech prosím tuhle stránku otevřenou.
           </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (noAccess) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-6">
+        <div className="card max-w-md w-full p-10 text-center">
+          <div className="text-5xl mb-6">🔗</div>
+          <h1 className="text-xl font-bold text-primary mb-3">Otevři prosím odkaz z e-mailu</h1>
+          <p className="text-primary/70 mb-6 leading-relaxed">
+            Tahle stránka neumí načíst tvůj report bez přístupu. Klikni prosím na odkaz
+            v e-mailu a budeš pokračovat tam, kde jsi přestal(a).
+          </p>
+          <button onClick={() => router.push('/chat')} className="btn-primary">
+            Zpět do chatu →
+          </button>
         </div>
       </div>
     )
@@ -221,15 +251,23 @@ function ReportPageContent() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen px-6">
         <div className="card max-w-md w-full p-10 text-center">
-          <div className="text-5xl mb-6">💬</div>
-          <h1 className="text-xl font-bold text-primary mb-3">Diagnostika ještě není hotová</h1>
+          <div className="text-5xl mb-6">🛠️</div>
+          <h1 className="text-xl font-bold text-primary mb-3">Skládání mapy se zaseklo</h1>
           <p className="text-primary/70 mb-6 leading-relaxed">
-            Report se vygeneruje až po dokončení všech 5 fází. Vrať se do chatu
-            a pokračuj v rozhovoru — tlačítko pro report se objeví automaticky na konci.
+            Nic se neztratilo, tvůj rozhovor je v bezpečí. Občas se generování nepovede napoprvé,
+            stačí to zkusit znovu.
           </p>
-          <button onClick={() => router.push('/chat')} className="btn-primary">
-            Zpět do chatu →
+          <button
+            onClick={() => sessionId && loadOrGenerate(sessionId)}
+            className="btn-primary mb-4"
+          >
+            Zkusit znovu →
           </button>
+          <p className="text-primary/50 text-sm">
+            Kdyby to nešlo ani na druhý pokus, napiš mi na{' '}
+            <a href="mailto:lenka@inspiraise.com" className="text-secondary underline underline-offset-2">lenka@inspiraise.com</a>{' '}
+            a mapu ti pošlu.
+          </p>
         </div>
       </div>
     )
@@ -655,21 +693,25 @@ function ReportPageContent() {
 
         {/* CTA — tisknutelná verze (jen v PDF) */}
         <section className="hidden print:block print-break-before">
-          <div className="report-hero p-8 text-center">
-            <img src="/logo.svg" alt="inspiraise" className="h-7 mx-auto mb-5 brightness-0 invert opacity-70" />
-            <h2 className="text-2xl font-bold text-white mb-3">Chceš s tím pracovat dál?</h2>
-            <p className="text-white/80 mb-6 max-w-lg mx-auto leading-relaxed">
+          {/* Tmavý text na světlém — aby se spolehlivě vytisklo i bez pozadí */}
+          <div className="p-8 text-center" style={{ border: '2px solid #e4bdd1', borderRadius: '16px' }}>
+            <img src="/logo.svg" alt="inspiraise" className="h-7 mx-auto mb-5" />
+            <h2 className="text-2xl font-bold text-primary mb-3">Chceš s tím pracovat dál?</h2>
+            <p className="text-primary/75 mb-5 max-w-lg mx-auto leading-relaxed">
               Teď víš, kde je tvoje hodnota. Dalším krokem je přetavit ji do nabídky,
-              ceny a komunikace — přesně to děláme v individuální konzultaci.
+              ceny a komunikace. To spolu zvládneme v individuální konzultaci
+              (60 minut, zvýhodněná cena pro klientky Hodnotového zrcadla).
             </p>
-            <div className="bg-white/15 rounded-2xl p-6 max-w-sm mx-auto">
-              <p className="text-white font-bold mb-1">Individuální konzultace</p>
-              <p className="text-white/70 text-sm mb-3">60 minut · zvýhodněná cena pro klientky Hodnotového zrcadla</p>
-              <p className="text-orange font-semibold text-base">
-                form.fapi.cz/?id=00965c12-7f50-494b-ba9a-6b812d69313a
+            <p className="text-primary font-bold mb-1">Domluvit konzultaci:</p>
+            <p className="text-secondary font-semibold mb-6" style={{ wordBreak: 'break-all' }}>
+              https://form.fapi.cz/?id=00965c12-7f50-494b-ba9a-6b812d69313a
+            </p>
+            <div style={{ borderTop: '1px solid #e4bdd1', paddingTop: '16px', marginTop: '8px' }}>
+              <p className="text-primary font-semibold">Lenka Pechrová · Inspiraise</p>
+              <p className="text-primary/70 text-sm">
+                lenka@inspiraise.com · inspiraise.com · Instagram: @inspiraise.cz
               </p>
             </div>
-            <p className="text-white/40 text-xs mt-6">© {new Date().getFullYear()} inspiraise</p>
           </div>
         </section>
 

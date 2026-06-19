@@ -3,9 +3,16 @@ import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@/lib/supabase'
 import { SYSTEM_PROMPT } from '@/lib/systemPrompt'
 
+export const maxDuration = 60
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
+
+// Odstraň dlouhé/střední pomlčky (nahraď čárkou) — Lenka je nechce v textech
+function stripDashes(text: string): string {
+  return text.replace(/\s*[—–]\s*/g, ', ')
+}
 
 interface Message {
   role: 'user' | 'assistant'
@@ -59,7 +66,9 @@ export async function POST(req: NextRequest) {
     })
 
     const rawText = response.content[0].type === 'text' ? response.content[0].text : ''
-    const { clean, phase, complete } = parsePhase(rawText)
+    const parsed = parsePhase(rawText)
+    const clean = stripDashes(parsed.clean)
+    const { phase, complete } = parsed
 
     const newPhase = phase > 0 ? phase : session.current_phase
 

@@ -16,6 +16,9 @@ function toVocative(fullName: string): string {
   return name
 }
 
+// Vercel: dej funkci dost času na vygenerování reportu (Hobby plán = max 60 s)
+export const maxDuration = 60
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 })
@@ -28,6 +31,9 @@ Klíčové zásady:
 - Používej konkrétní formulace z odpovědí klientky.
 - ČEŠTINA: Piš výhradně spisovnou, přirozenou češtinou se správným tvaroslovím, slovosledem a významem. Vyhni se nesmyslným nebo doslovně přeloženým obratům a podivným idiomům (např. NE „volali přes hlavu nákupčích" — správně třeba „volali rovnou tobě a obcházeli nákupčí"). Každá věta musí znít, jako by ji napsal rodilý mluvčí. Raději jednoduchá a jasná věta než krkolomná metafora.
 - Piš v ženském rodě, osobně a přesně.
+- DRUHÁ OSOBA — POVINNÉ: Oslovuj klientku přímo, ve 2. osobě („ty vidíš", „tvoje silná stránka", „umíš"). NIKDY o ní nepiš ve 3. osobě jejím jménem (ŠPATNĚ: „Bára vidí…", „Petra umí…"). Jméno použij jen ve vokativu jako oslovení (např. „Báro, …"), ne jako podmět.
+- ŽÁDNÉ POMLČKY — POVINNÉ: Nikdy nepoužívej dlouhou pomlčku (—) ani střední pomlčku (–). Místo nich piš čárku, tečku nebo větu rozděl. Krátký spojovník používej jen ve složených slovech (např. „česko-slovenský"). Ideálně se obejdi bez pomlček úplně.
+- STRUČNOST A ÚDERNOST: Buď konkrétní a úsporná. Každá sekce jen to podstatné, žádná vata. Report má být silný a čtivý, ne vyčerpávající. Drž celkový rozsah přiměřený, ať se dá přečíst na jeden zátah.
 - TÓN: Úvod reportu (heroInsight, clientSummary, shortMirror) piš oceňujícím, ale věcným tónem — žádné mazání medu kolem huby, žádná vata. Cílem není nadchnout superlativy, ale přesně pojmenovat reálnou silnou stránku tak, aby si klientka řekla „jo, tohle jsem přesně já". Vyhni se prázdným frázím typu „vzácná schopnost", „unikátní dar", „výjimečný talent" — používej je jen tehdy, když z rozhovoru opravdu vyplývá, že jde o něco, co se běžně nevidí. Analytické sekce (slepá místa, vnitřní napětí, síla × riziko) drž věcné a přesné.
 - VEĎ SILNOU STRÁNKOU: Report vždy otevírá tím nejlepším — nejdřív konkrétně pojmenuj, v čem je klientka silná a jak se to dá využít, a rozviň to. Kritičtější vhled (na co si dát pozor, rizika, slepá místa) přichází až po tomto základu, nikdy ne jako první dojem.
 - Pokud znáš jméno klientky, skloňuj ho vždy do vokativu (5. pád): Lenka → Lenko, Jana → Jano, Petra → Petro, Markéta → Markéto.
@@ -157,7 +163,7 @@ export async function POST(req: NextRequest) {
 
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 8000,
+      max_tokens: 5000,
       system: REPORT_SYSTEM_PROMPT,
       messages: [
         {
@@ -167,7 +173,9 @@ export async function POST(req: NextRequest) {
       ],
     })
 
-    const rawText = response.content[0].type === 'text' ? response.content[0].text : '{}'
+    const rawTextRaw = response.content[0].type === 'text' ? response.content[0].text : '{}'
+    // Pojistka: odstraň dlouhé/střední pomlčky z celého výstupu (nahraď čárkou)
+    const rawText = rawTextRaw.replace(/\s*[—–]\s*/g, ', ')
 
     let reportData
     try {
