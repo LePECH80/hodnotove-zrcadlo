@@ -243,7 +243,7 @@ function ReportPageContent() {
           </button>
           <p className="text-primary/50 text-sm">
             Kdyby to nešlo ani na druhý pokus, napiš mi na{' '}
-            <a href="mailto:lenka@inspiraise.com" className="text-secondary underline underline-offset-2">lenka@inspiraise.com</a>{' '}
+            <a href="mailto:lenka.pechrova@inspiraise.com" className="text-secondary underline underline-offset-2">lenka.pechrova@inspiraise.com</a>{' '}
             a mapu ti pošlu.
           </p>
         </div>
@@ -519,7 +519,7 @@ function ReportPageContent() {
             <div style={{ borderTop: '1px solid #e4bdd1', paddingTop: '16px', marginTop: '8px' }}>
               <p className="text-primary font-semibold">Lenka Pechrová · Inspiraise</p>
               <p className="text-primary/70 text-sm">
-                lenka@inspiraise.com · inspiraise.com · Instagram: @lenka_pechrova_inspiraise
+                lenka.pechrova@inspiraise.com · inspiraise.com · Instagram: @lenka_pechrova_inspiraise
               </p>
             </div>
           </div>

@@ -264,7 +264,7 @@ export default function ChatPage() {
           </p>
           <p className="text-primary/50 text-sm">
             Kdyby cokoliv, napiš na{' '}
-            <a href="mailto:lenka@inspiraise.com" className="text-secondary underline underline-offset-2">lenka@inspiraise.com</a>.
+            <a href="mailto:lenka.pechrova@inspiraise.com" className="text-secondary underline underline-offset-2">lenka.pechrova@inspiraise.com</a>.
           </p>
         </div>
       </div>

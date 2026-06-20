@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
 
   const supabase = createClient()
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mapa.inspiraise.com'
-  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka.pechrova@inspiraise.com'
   const devToken = process.env.DEV_TOKEN
 
   // Nedokončené přístupy (report ještě nevznikl), které ještě mají nárok na připomínku

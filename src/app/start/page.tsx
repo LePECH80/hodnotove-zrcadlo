@@ -122,10 +122,10 @@ function StartContent() {
                 Tuhle diagnostiku už máš hotovou a tvoje Osobní mapa hodnoty ti dorazila e-mailem.
                 Zkontroluj prosím schránku (i spam). Kdyby report nedorazil, napiš mi na{' '}
                 <a
-                  href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}`}
+                  href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka.pechrova@inspiraise.com'}`}
                   className="text-secondary underline underline-offset-2"
                 >
-                  {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}
+                  {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka.pechrova@inspiraise.com'}
                 </a>.
               </>
             ) : (

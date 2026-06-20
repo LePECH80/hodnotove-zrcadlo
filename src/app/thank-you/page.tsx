@@ -67,10 +67,10 @@ export default function ThankYouPage() {
         <p className="text-primary/50 text-sm">
           Otázky? Napiš na{' '}
           <a
-            href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}`}
+            href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka.pechrova@inspiraise.com'}`}
             className="text-secondary underline underline-offset-2"
           >
-            {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka@inspiraise.com'}
+            {process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lenka.pechrova@inspiraise.com'}
           </a>
         </p>
 
