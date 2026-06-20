@@ -16,8 +16,9 @@ function toVocative(fullName: string): string {
   return name
 }
 
-// Vercel: dej funkci dost času na vygenerování reportu (Hobby plán = max 60 s)
-export const maxDuration = 60
+// Vercel Pro: dej funkci dost času na vygenerování reportu i z dlouhých rozhovorů.
+// POZOR: hodnota > 60 vyžaduje plán Pro; na Hobby plánu by build selhal.
+export const maxDuration = 300
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
