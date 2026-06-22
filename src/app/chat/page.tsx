@@ -202,7 +202,17 @@ export default function ChatPage() {
 
   const handleSend = () => {
     if (!input.trim() || loading || complete) return
-    if (isListening) recognitionRef.current?.stop()
+    // Diktování úplně ukonči a odpoj, ať dobíhající přepis po odeslání nevrátí text zpět do řádku
+    if (recognitionRef.current) {
+      recognitionRef.current.onresult = null
+      recognitionRef.current.onend = null
+      recognitionRef.current.onerror = null
+      try { recognitionRef.current.stop() } catch { /* ignore */ }
+      recognitionRef.current = null
+    }
+    setIsListening(false)
+    baseTextRef.current = ''
+    finalTextRef.current = ''
     sendMessage(input.trim())
   }
 
