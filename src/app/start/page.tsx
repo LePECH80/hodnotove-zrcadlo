@@ -265,15 +265,17 @@ function StartContent() {
             </p>
             <p>
               Není to nutnost. Diagnostikou můžeš projít úplně stejně i psaním. Pokud se ti ale
-              lépe přemýšlí nahlas, doporučuji zkusit odpovídat hlasem.
+              lépe přemýšlí nahlas, zkus mluvit, máš dvě možnosti:
             </p>
             <p>
-              Já osobně používám aplikaci{' '}
-              <strong className="text-primary">Wispr Flow</strong>, která převádí hlas do textu
-              a jako jedna z mála mi opravdu rozumí a nepíše hlouposti. :-)
+              🎙️ <strong className="text-primary">Nejjednodušší:</strong> přímo tady v appce klikni
+              u řádku na <strong className="text-primary">ikonu mikrofonu</strong> a mluv. Je to zdarma a hned.
             </p>
             <p>
-              👉 Jestli chceš vyzkoušet Wispr Flow v plné verzi na 30 dní zdarma, použij{' '}
+              ✍️ <strong className="text-primary">Chceš přesnější přepis a hezky formátovaný text</strong>{' '}
+              (interpunkce, odstavce, věty jako psané)? Pak doporučuju aplikaci{' '}
+              <strong className="text-primary">Wispr Flow</strong>, kterou používám i já a jako jedna
+              z mála mi opravdu rozumí. Vyzkoušíš ji 30 dní zdarma přes{' '}
               <a
                 href="https://wisprflow.ai/r?LENKA74"
                 target="_blank"

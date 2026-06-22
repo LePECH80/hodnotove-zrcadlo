@@ -95,8 +95,9 @@ export async function POST(req: NextRequest) {
               </p>
               <p style="margin:0 0 20px;color:#58113c;font-size:16px;line-height:1.7;">
                 Celý proces trvá <strong>45–60 minut</strong>. Připrav si klidné místo
-                a ideálně i aplikaci, která přepisuje řeč na text —
-                mluveným slovem to půjde plynuleji. Já využívám
+                a klidně odpovídej hlasem, nahlas to jde přirozeněji a otevřeněji než psaním.
+                Přímo v appce k tomu najdeš u řádku ikonu mikrofonu, stačí kliknout a mluvit.
+                A jestli chceš přesnější a hezky formátovaný přepis, používám
                 <strong>Wispr Flow</strong>. Když ji budeš chtít vyzkoušet,
                 použij <a href="https://wisprflow.ai/r?LENKA74" style="color:#8d175e;">tento odkaz</a>
                 a můžeš appku nezávazně testovat 30 dní v plné verzi zdarma.

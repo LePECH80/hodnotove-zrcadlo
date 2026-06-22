@@ -46,9 +46,11 @@ export default function ThankYouPage() {
           <div className="flex items-start gap-4">
             <span className="text-2xl flex-shrink-0">🎙</span>
             <div>
-              <p className="font-semibold text-primary mb-1">Tip: diktování místo psaní</p>
+              <p className="font-semibold text-primary mb-1">Tip: mluv místo psaní</p>
               <p className="text-primary/70 text-sm leading-relaxed">
-                Mluveným slovem to půjde přirozeněji. Zkus appku{' '}
+                Nahlas to půjde přirozeněji a otevřeněji než psaním. Přímo v appce stačí kliknout
+                u řádku na ikonu mikrofonu a mluvit, zdarma a hned. A jestli chceš přesnější a hezky
+                formátovaný přepis, zkus appku{' '}
                 <a
                   href="https://wisprflow.ai/r?LENKA74"
                   target="_blank"
@@ -57,7 +59,7 @@ export default function ThankYouPage() {
                 >
                   Wispr Flow
                 </a>{' '}
-                — 30 dní zdarma.
+                (30 dní zdarma).
               </p>
             </div>
           </div>
