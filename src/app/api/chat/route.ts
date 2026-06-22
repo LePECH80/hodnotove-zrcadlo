@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     if (typeof lastContent === 'string') {
       apiMessages[lastIdx] = {
         role: apiMessages[lastIdx].role,
-        content: [{ type: 'text', text: lastContent, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+        content: [{ type: 'text', text: lastContent, cache_control: { type: 'ephemeral' } }],
       }
     }
 
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 1000,
-      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
       messages: apiMessages,
     })
 
