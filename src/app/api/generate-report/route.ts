@@ -99,9 +99,10 @@ interface Message {
 
 export async function POST(req: NextRequest) {
   try {
-    const { sessionId, messages } = await req.json() as {
+    const { sessionId, messages, savedThoughts } = await req.json() as {
       sessionId: string
       messages: Message[]
+      savedThoughts?: { messageIndex: number; content: string; role: 'user' | 'assistant' }[]
     }
 
     if (!sessionId || !messages?.length) {
@@ -180,6 +181,17 @@ export async function POST(req: NextRequest) {
       const strengths = (reportData.coreStrengths || []).slice(0, 3)
       const firstSteps = (reportData.firstSteps || []).slice(0, 3)
 
+      // Momenty, které si klientka označila hvězdičkou (jen text, žádné AI volání)
+      const escHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      const aha = (savedThoughts || []).filter(t => t && typeof t.content === 'string' && t.content.trim())
+      const ahaHtml = aha.length > 0 ? `
+        <h2 style="margin:28px 0 16px;color:#58113c;font-size:17px;font-family:sans-serif;font-weight:700;">Momenty, které sis označila ⭐</h2>
+        ${aha.map(t => `
+        <div style="margin:0 0 12px;padding:14px 18px;background-color:#f8f5f3;border-left:4px solid #f1905c;border-radius:0 10px 10px 0;">
+          <p style="margin:0 0 4px;color:#8d175e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-family:sans-serif;font-weight:600;">${t.role === 'assistant' ? 'Poznámka kouče' : 'Moje myšlenka'}</p>
+          <p style="margin:0;color:#58113c;font-size:14px;line-height:1.6;font-style:italic;">${escHtml(t.content)}</p>
+        </div>`).join('')}` : ''
+
       await resend.emails.send({
         from: 'Lenka z Inspiraise <diagnostika@inspiraise.com>',
         to: sessionData.client_email,
@@ -228,6 +240,9 @@ export async function POST(req: NextRequest) {
         <ol style="margin:0 0 28px;padding-left:20px;color:#58113c;font-size:15px;line-height:1.8;">
           ${firstSteps.map((s: string) => `<li style="margin-bottom:8px;">${s}</li>`).join('')}
         </ol>` : ''}
+
+        <!-- Označené momenty (hvězdičky) -->
+        ${ahaHtml}
 
         <!-- Závěr -->
         <div style="background-color:#58113c;border-radius:10px;padding:20px 24px;margin:0 0 28px;">

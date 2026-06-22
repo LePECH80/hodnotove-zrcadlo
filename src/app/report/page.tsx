@@ -138,10 +138,14 @@ function ReportPageContent() {
           setLoading(false)
           return
         }
+        // Označené aha momenty (hvězdičky) z prohlížeče → ať se dostanou do e-mailu
+        const savedRaw = localStorage.getItem('savedThoughts') ?? sessionStorage.getItem('savedThoughts')
+        let savedThoughts: SavedThought[] = []
+        try { savedThoughts = savedRaw ? JSON.parse(savedRaw) : [] } catch { /* ignore */ }
         const res = await fetch('/api/generate-report', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sessionId: sid, messages: ls.messages ?? [] }),
+          body: JSON.stringify({ sessionId: sid, messages: ls.messages ?? [], savedThoughts }),
         })
         const d = await res.json()
         if (res.ok && d.report) {
