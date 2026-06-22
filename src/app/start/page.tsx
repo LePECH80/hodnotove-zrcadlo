@@ -255,17 +255,20 @@ function StartContent() {
           <p className="font-bold text-primary mb-3">💡 Mám pro tebe jeden tip.</p>
           <div className="space-y-3 text-sm text-primary/80 leading-relaxed">
             <p>
-              Z vlastních zkušeností jsem si všimla, že mnohem zajímavější odpovědi vznikají
-              ve chvíli, kdy lidé <strong className="text-primary">mluví, místo aby psali</strong>.
+              Jedna věc ti hodně pomůže: <strong className="text-primary">mluv, nepiš</strong>. Z recenzí
+              klientek vychází úplně jasně, že když odpovídají hlasem, výsledek je reálnější a opravdovější.
             </p>
             <p>
-              Když píšeme, máme tendenci odpovědi upravovat, zkracovat a hledat správná slova.
-              Když mluvíme, myšlenky plynou přirozeněji a často se objeví souvislosti, které by nás
-              při psaní vůbec nenapadly.
+              Když píšeme, myšlenky upravujeme, zkracujeme a hledáme „správná" slova. Když mluvíš, vychází to
+              tak, jak ti to přichází na jazyk. <strong className="text-primary">Mluv klidně zmateně, nahlas
+              a bez úprav</strong>, jak ti myšlenky plynou. Nemusíš to skládat do hezkých vět.
             </p>
             <p>
-              Není to nutnost. Diagnostikou můžeš projít úplně stejně i psaním. Pokud se ti ale
-              lépe přemýšlí nahlas, zkus mluvit, máš dvě možnosti:
+              Nevadí, když je to surové nebo neučesané. Průvodce si z toho vytáhne to podstatné, a kdyby
+              něčemu nerozuměl, prostě se doptá. Čím míň to budeš ladit, tím pravdivější obrázek vznikne.
+            </p>
+            <p>
+              Jak na to, máš dvě možnosti:
             </p>
             <p>
               🎙️ <strong className="text-primary">Nejjednodušší:</strong> přímo tady v appce klikni
